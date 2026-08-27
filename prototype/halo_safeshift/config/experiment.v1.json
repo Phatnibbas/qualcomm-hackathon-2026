@@ -1,0 +1,427 @@
+{
+  "config_id": "experiment.v1",
+  "purpose": "Single versioned home for every scientific-contract value used by the HALO SafeShift local preparation pipeline. Implementation code loads these values; it must not restate them inline.",
+  "authority": "docs/superpowers/specs/2026-08-15-halo-safeshift-technical-design.md (D-014). Where this file deviates from that spec, the deviation is listed in `declared_deviations_from_technical_design` and is an orchestrator instruction, not a silent change.",
+
+  "source": {
+    "thingspeak_channel_id": 3428136,
+    "feeds_url_template": "https://api.thingspeak.com/channels/{channel}/feeds.json",
+    "channel_url_template": "https://api.thingspeak.com/channels/{channel}.json",
+    "max_results_per_page": 8000,
+    "page_cap": 40,
+    "request_timeout_seconds": 60,
+    "retry_attempts": 4,
+    "retry_sleep_seconds": 3,
+    "raw_columns": ["entry_id", "created_at", "status", "field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"],
+    "second_station_channel_id_excluded": 3448221,
+    "second_station_exclusion_reason": "Bao Loc channel 3448221 is explicitly excluded from all data work (docs/VERIFIED_FACTS.md section 1)."
+  },
+
+  "field_semantics": {
+    "note": "Keys are the channel-metadata field labels as published by ThingSpeak. The pipeline resolves fieldN -> label -> semantic name from the frozen metadata at run time; it never trusts positional order.",
+    "label_to_semantic": {
+      "WindSpeed": "wind_speed",
+      "WindDirection": "wind_direction",
+      "Temperature": "temperature",
+      "Pressure": "pressure",
+      "Light": "light",
+      "Humidity": "humidity",
+      "Noise": "noise",
+      "PM2.5": "pm25"
+    },
+    "required_semantics": ["temperature", "humidity", "wind_speed"],
+    "optional_semantics": ["wind_direction", "light", "pressure", "pm25", "noise"],
+    "feature_required_semantics": ["temperature", "humidity", "wind_speed", "wind_direction", "light", "pressure", "pm25", "noise"],
+    "two_requirement_levels": {
+      "required_semantics": "Needed to compute the target and to decide bin validity. A row or bin without these is unusable at all.",
+      "feature_required_semantics": "Needed to CONSTRUCT the P0 feature schema. The schema emits one column per semantic per bin, so a channel that the metadata never declares cannot be filled at all. Its absence is a contract violation, not a missing value.",
+      "failure_timing": "Absence of a feature_required semantic in the channel metadata must fail during metadata resolution, before any row is read. A missing VALUE inside an individual row or bin is different: it makes that sample ineligible, without imputation, and is counted in window diagnostics."
+    },
+    "units": {
+      "temperature": "degC",
+      "humidity": "percent_rh",
+      "wind_speed": "m_per_s",
+      "wind_direction": "degrees_clockwise_from_north",
+      "pressure": "kPa",
+      "light": "lux",
+      "pm25": "ug_per_m3",
+      "noise": "dB"
+    }
+  },
+
+  "usable_epoch": {
+    "wind_scale_fix_utc": "2026-07-21T15:42:00Z",
+    "reason": "Before this instant the station firmware divided wind by 100 instead of 10 (docs/VERIFIED_FACTS.md section 1). Wind is unusable earlier, and wind is a required target input, so all earlier rows are discarded.",
+    "boundary": "Rows at or after this instant are admitted; rows strictly before it are discarded."
+  },
+
+  "qc": {
+    "reject_non_finite_required": true,
+    "reject_temperature_max_c": null,
+    "reject_temperature_le_c": 0.0,
+    "reject_humidity_le_percent": 0.0,
+    "reject_humidity_gt_percent": 100.0,
+    "reject_wind_speed_lt_mps": 0.0,
+    "reject_pressure_le_kpa": 0.0,
+    "wind_direction_valid_range_deg": [0.0, 360.0],
+    "interpolate_required_channels": false,
+    "notes": [
+      "Optional channels are not gap-filled either; a bin simply carries a null and a missing reason.",
+      "Rejections are counted per reason and preserved in qc_report.json."
+    ]
+  },
+
+  "resample": {
+    "bin_minutes": 5,
+    "label": "right",
+    "closed": "right",
+    "aggregation": "median",
+    "min_raw_observations_per_bin": 6,
+    "expected_raw_observations_per_bin": 11,
+    "expected_count_basis": "Median posting cadence measured at ~27 s (docs/VERIFIED_FACTS.md section 1); 300 s / 27 s = 11.1, floored to 11. Used only to normalise the raw-count feature.",
+    "wind_direction_aggregation_limitation": "The median of a circular variable is not wrap-around safe. The contract fixes median aggregation for every channel, so wind_direction is aggregated as a plain median of degrees and this limitation is declared rather than silently corrected. Downstream the direction is encoded as sin/cos."
+  },
+
+  "outage": {
+    "long_outage_hours": 6,
+    "gap_report_thresholds_seconds": [60, 300, 900],
+    "purpose": "long_outage_hours segments the record for the recovery quarantine. It is a configured rule, not an embedded constant."
+  },
+
+  "windows": {
+    "lookback_minutes": 60,
+    "lookback_bins": 12,
+    "horizon_minutes": 30,
+    "horizon_bins": 6,
+    "input_interval": "(t - 60 min, t]  -- the 12 right-labelled bins labelled t-55 ... t",
+    "target_interval": "(t + 25 min, t + 30 min]  -- the single right-labelled bin labelled t+30",
+    "overlap_check": "input_interval and target_interval are disjoint by construction; a test asserts it."
+  },
+
+  "features": {
+    "per_bin_order": [
+      "temperature",
+      "humidity",
+      "wind_speed",
+      "wind_direction_sin",
+      "wind_direction_cos",
+      "light_log1p",
+      "pressure",
+      "pm25_log1p",
+      "noise",
+      "raw_count_normalised"
+    ],
+    "issue_time_order": [
+      "apparent_temperature_now",
+      "local_time_of_day_sin",
+      "local_time_of_day_cos",
+      "day_of_year_sin",
+      "day_of_year_cos",
+      "issue_bin_staleness_normalised",
+      "window_min_raw_count_normalised",
+      "window_all_required_valid"
+    ],
+    "eligibility": {
+      "all_input_bins_required_valid": true,
+      "target_bin_required_valid": true,
+      "all_input_bins_feature_complete": true,
+      "feature_complete_definition": "every optional semantic channel has a finite median in the bin",
+      "why_feature_complete_is_separate": "Bin validity is defined by the required-channel raw-count rule alone, exactly as specified. Feature completeness is tracked as a second, separately counted condition so that no imputation value has to be invented for a missing optional channel. A bin that is valid but not feature-complete simply yields no sample, and the loss is counted in qc/window reporting.",
+      "imputation_applied": false
+    },
+    "no_leakage_rule": "Features at issue time t read only bins labelled <= t. The target reads only the bin labelled t + horizon_minutes. The two intervals are disjoint."
+  },
+
+  "timezone": {
+    "local_timezone": "Asia/Ho_Chi_Minh",
+    "local_utc_offset_hours": 7,
+    "fallback_note": "Vietnam has observed no DST since 1975, so the fixed +07:00 offset is exact over the data range. Code prefers zoneinfo and records which path was used in the feature schema.",
+    "day_boundary_for_folds": "UTC"
+  },
+
+  "target": {
+    "formula_version": "bom-non-radiation-apparent-temperature-v1",
+    "source": "Australian Bureau of Meteorology, Thermal Comfort observations, https://www.bom.gov.au/info/thermal_stress/",
+    "vapour_pressure_constants": {"a": 6.105, "b": 17.27, "c": 237.7},
+    "apparent_temperature_coefficients": {"vapour_pressure": 0.33, "wind_speed": -0.70, "offset": -4.00},
+    "rh_fraction_guard_max_percent": 1.0,
+    "rh_fraction_guard_reason": "A relative humidity supplied as a 0-1 fraction instead of a percentage would silently produce a plausible-looking but wrong apparent temperature. Values in (0, 1.0] are rejected as a suspected unit substitution. The station has never reported a value in that range.",
+    "wind_height_m_agl": 15.0,
+    "bom_reference_wind_height_m": 10.0,
+    "apply_wind_height_correction": false
+  },
+
+  "splits": {
+    "policy": "expanding-window blocked folds over historical_development only",
+    "forbidden": ["random_split", "shuffled_cross_validation", "k_fold_random"],
+    "day_boundary": "UTC",
+    "min_train_days": 8,
+    "validation_days": 3,
+    "max_folds": 8,
+    "max_folds_note": "A runaway guard, not a coverage limit. It is set above the number of blocks the current record can supply so that the newest days are not silently dropped from the protocol. fold_definitions.json records available_utc_days alongside the realised fold count, so any truncation stays visible.",
+    "embargo_minutes": 90,
+    "embargo_sides": "both",
+    "embargo_rule": "For a train/validation boundary B: a train sample is admitted only when its target timestamp is at or before B - embargo_minutes; a validation sample is admitted only when its window start (issue_time - lookback_minutes) is at or after B + embargo_minutes. Total separation is therefore 2 x embargo_minutes.",
+    "incomplete_day_policy": "Internal incomplete UTC days are retained. Eligibility is decided per window by the QC/validity rules only. No post-hoc 'complete day = N bins' threshold is applied.",
+    "fit_scope": "Scaler, clipping bounds, climatology and every other fitted transformation are fitted on the fold's train samples only.",
+    "fail_closed_on_empty_fold": true,
+    "fail_closed_on_empty_fold_reason": "A planned fold that realises zero train or zero validation samples changes the evaluation protocol. Silently dropping it means the reported fold count no longer describes what was planned, and the mean across folds is taken over a different set than the one declared. The run is rejected instead so the operator decides.",
+    "status": "retrospective model development. This is NOT an untouched-test certification: the historical final dates have already been examined by an external verifier."
+  },
+
+  "recovery_partition": {
+    "boundary_source": "raw feed timestamps",
+    "boundary_source_rule": "The recovery boundary is derived from the frozen raw feed after timestamp parsing, removal of unparsable timestamps and deterministic duplicate handling ONLY. It is computed before wind-epoch filtering, before required-channel QC, before physical-range QC and before any sensor-field validation.",
+    "boundary_source_reason": "An outage means the station stopped POSTING. Sensor values that fail QC still prove the station was alive and posting, so letting QC decide the boundary lets a run of bad readings manufacture an outage that never happened. Feed continuity and admitted-data continuity are recorded separately and are not interchangeable.",
+    "duplicate_handling": "keep the first occurrence of each entry_id in ascending entry_id order; ties in timestamp are irrelevant because ordering is by entry_id",
+    "rule": "recovery_start = timestamp of the first raw observation after the latest gap longer than outage.long_outage_hours",
+    "historical_development": "resampled bins strictly before recovery_start",
+    "prospective_quarantine": "resampled bins at or after recovery_start",
+    "quarantine_permitted_inspection": ["schema_correctness", "timestamps", "missing_fields", "ingestion_continuity", "window_formability"],
+    "quarantine_forbidden_use": ["model_performance_metrics", "model_selection", "feature_selection", "threshold_selection", "hyperparameter_selection"]
+  },
+
+  "models": {
+    "baselines": ["persistence", "climatology_local_time"],
+    "learned_families": ["ridge", "elastic_net", "gradient_boosting", "extra_trees", "xgboost_optional", "mlp_relu"],
+    "forbidden_families_this_phase": ["random_forest", "lightgbm", "catboost", "lstm", "gru", "transformer"],
+    "parameterizations": ["direct", "residual"],
+    "parameterization_provenance": {
+      "direct": "predeclared in the technical design (predict AT(t+30)).",
+      "residual": "post-hoc hypothesis; suggested after an exploratory look at historical outcomes. Retrospective evaluation only. Do not describe it as predeclared."
+    },
+    "selection_authority": "No final family, parameterization or hyperparameter may be selected on this machine. Selection happens in the later Colab phase against the fold protocol above.",
+    "climatology": {
+      "key": "local_time_of_day",
+      "bin_minutes": 30,
+      "statistic": "median",
+      "fallback": "train_target_median"
+    },
+    "trial_budget": {
+      "policy": "curated explicit trial list; NO runtime Cartesian expansion",
+      "why_not_a_grid": "A Cartesian product over per-family value lists silently multiplies: the previous configuration expanded to well over a hundred fits and its size was invisible in the file. An explicit list makes the budget reviewable, keeps every trial's direct/residual provenance attached to the trial itself, and makes 'no hidden additional trials' a testable property.",
+      "min_total_trials": 24,
+      "max_total_trials": 36,
+      "max_default_trials_excluding_xgboost": 32,
+      "ordering": "deterministic: exactly the order of the `trials` array below",
+      "adjustment_rule": "The trial list is frozen before any metric is computed. It must not be extended, pruned or reordered after validation outcomes are seen."
+    },
+    "trials": [
+      {"trial_id": "ridge-a0p1-direct", "family": "ridge", "parameterization": "direct", "params": {"alpha": 0.1}},
+      {"trial_id": "ridge-a1-direct", "family": "ridge", "parameterization": "direct", "params": {"alpha": 1.0}},
+      {"trial_id": "ridge-a10-direct", "family": "ridge", "parameterization": "direct", "params": {"alpha": 10.0}},
+      {"trial_id": "ridge-a1-residual", "family": "ridge", "parameterization": "residual", "params": {"alpha": 1.0}},
+
+      {"trial_id": "enet-a0p01-l0p5-direct", "family": "elastic_net", "parameterization": "direct", "params": {"alpha": 0.01, "l1_ratio": 0.5}},
+      {"trial_id": "enet-a0p1-l0p5-direct", "family": "elastic_net", "parameterization": "direct", "params": {"alpha": 0.1, "l1_ratio": 0.5}},
+      {"trial_id": "enet-a0p01-l0p9-direct", "family": "elastic_net", "parameterization": "direct", "params": {"alpha": 0.01, "l1_ratio": 0.9}},
+      {"trial_id": "enet-a0p01-l0p5-residual", "family": "elastic_net", "parameterization": "residual", "params": {"alpha": 0.01, "l1_ratio": 0.5}},
+
+      {"trial_id": "gb-n200-d3-lr0p05-direct", "family": "gradient_boosting", "parameterization": "direct", "params": {"n_estimators": 200, "max_depth": 3, "learning_rate": 0.05, "subsample": 1.0}},
+      {"trial_id": "gb-n200-d2-lr0p05-direct", "family": "gradient_boosting", "parameterization": "direct", "params": {"n_estimators": 200, "max_depth": 2, "learning_rate": 0.05, "subsample": 1.0}},
+      {"trial_id": "gb-n200-d3-lr0p1-direct", "family": "gradient_boosting", "parameterization": "direct", "params": {"n_estimators": 200, "max_depth": 3, "learning_rate": 0.1, "subsample": 1.0}},
+      {"trial_id": "gb-n400-d3-lr0p05-direct", "family": "gradient_boosting", "parameterization": "direct", "params": {"n_estimators": 400, "max_depth": 3, "learning_rate": 0.05, "subsample": 1.0}},
+      {"trial_id": "gb-n200-d3-lr0p05-residual", "family": "gradient_boosting", "parameterization": "residual", "params": {"n_estimators": 200, "max_depth": 3, "learning_rate": 0.05, "subsample": 1.0}},
+      {"trial_id": "gb-n400-d3-lr0p05-residual", "family": "gradient_boosting", "parameterization": "residual", "params": {"n_estimators": 400, "max_depth": 3, "learning_rate": 0.05, "subsample": 1.0}},
+
+      {"trial_id": "et-n300-dnone-leaf1-direct", "family": "extra_trees", "parameterization": "direct", "params": {"n_estimators": 300, "max_depth": null, "min_samples_leaf": 1}},
+      {"trial_id": "et-n300-d8-leaf1-direct", "family": "extra_trees", "parameterization": "direct", "params": {"n_estimators": 300, "max_depth": 8, "min_samples_leaf": 1}},
+      {"trial_id": "et-n300-d16-leaf4-direct", "family": "extra_trees", "parameterization": "direct", "params": {"n_estimators": 300, "max_depth": 16, "min_samples_leaf": 4}},
+      {"trial_id": "et-n300-dnone-leaf4-direct", "family": "extra_trees", "parameterization": "direct", "params": {"n_estimators": 300, "max_depth": null, "min_samples_leaf": 4}},
+      {"trial_id": "et-n300-dnone-leaf1-residual", "family": "extra_trees", "parameterization": "residual", "params": {"n_estimators": 300, "max_depth": null, "min_samples_leaf": 1}},
+      {"trial_id": "et-n300-d16-leaf4-residual", "family": "extra_trees", "parameterization": "residual", "params": {"n_estimators": 300, "max_depth": 16, "min_samples_leaf": 4}},
+
+      {"trial_id": "mlp-h64-a0p001-direct", "family": "mlp_relu", "parameterization": "direct", "params": {"hidden_layer_sizes": [64], "alpha": 0.001, "learning_rate_init": 0.001, "max_iter": 400}},
+      {"trial_id": "mlp-h64x32-a0p001-direct", "family": "mlp_relu", "parameterization": "direct", "params": {"hidden_layer_sizes": [64, 32], "alpha": 0.001, "learning_rate_init": 0.001, "max_iter": 400}},
+      {"trial_id": "mlp-h128x64-a0p001-direct", "family": "mlp_relu", "parameterization": "direct", "params": {"hidden_layer_sizes": [128, 64], "alpha": 0.001, "learning_rate_init": 0.001, "max_iter": 400}},
+      {"trial_id": "mlp-h64x32-a0p01-direct", "family": "mlp_relu", "parameterization": "direct", "params": {"hidden_layer_sizes": [64, 32], "alpha": 0.01, "learning_rate_init": 0.001, "max_iter": 400}},
+      {"trial_id": "mlp-h64x32-a0p001-residual", "family": "mlp_relu", "parameterization": "residual", "params": {"hidden_layer_sizes": [64, 32], "alpha": 0.001, "learning_rate_init": 0.001, "max_iter": 400}},
+      {"trial_id": "mlp-h128x64-a0p001-residual", "family": "mlp_relu", "parameterization": "residual", "params": {"hidden_layer_sizes": [128, 64], "alpha": 0.001, "learning_rate_init": 0.001, "max_iter": 400}},
+
+      {"trial_id": "xgb-n400-d4-lr0p05-direct", "family": "xgboost_optional", "parameterization": "direct", "params": {"n_estimators": 400, "max_depth": 4, "learning_rate": 0.05, "subsample": 0.9}},
+      {"trial_id": "xgb-n400-d3-lr0p05-direct", "family": "xgboost_optional", "parameterization": "direct", "params": {"n_estimators": 400, "max_depth": 3, "learning_rate": 0.05, "subsample": 0.9}},
+      {"trial_id": "xgb-n800-d4-lr0p05-direct", "family": "xgboost_optional", "parameterization": "direct", "params": {"n_estimators": 800, "max_depth": 4, "learning_rate": 0.05, "subsample": 0.9}},
+      {"trial_id": "xgb-n400-d4-lr0p05-residual", "family": "xgboost_optional", "parameterization": "residual", "params": {"n_estimators": 400, "max_depth": 4, "learning_rate": 0.05, "subsample": 0.9}}
+    ],
+    "xgboost_policy": {
+      "default_status": "skipped_by_policy",
+      "enable_flag": "--enable-xgboost",
+      "requirements_file_default": "requirements-colab.txt",
+      "requirements_file_xgboost": "requirements-colab-xgboost.txt",
+      "expected_version": "3.4.1",
+      "eligibility_gate": [
+        "the installed xgboost version equals expected_version",
+        "the dedicated neutral-export parity check passes on every deterministic probe vector",
+        "the fitted booster declares no categorical split",
+        "the fitted booster is single-output",
+        "the fitted booster declares no missing-value routing that the finite-input runtime cannot reach"
+      ],
+      "boundary": "An importable xgboost is not an eligible xgboost. Nothing in this pipeline may select an XGBoost candidate merely because the module loaded."
+    }
+  },
+
+  "selection": {
+    "scope": "retrospective blocked validation over historical_development only",
+    "certified_untouched_test": false,
+    "certified_untouched_test_reason": "The historical final dates have already been examined by an external verifier, so no block in this record can certify an untouched test.",
+    "rule": "Rank learned trials by mean validation MAE across the realised folds; the lowest is the best learned challenger.",
+    "engineering_gate": {
+      "status": "descriptive, observed thresholds applied to a retrospective comparison",
+      "absolute_mean_gain_min_degc": 0.05,
+      "relative_mean_gain_min_fraction": 0.05,
+      "comparison": "fold-level MAE of the best learned challenger against persistence on the IDENTICAL validation rows",
+      "uncertainty_reporting": "paired per-fold differences are reported with their spread; no confidence-interval lower-bound gate is invented",
+      "inconclusive_definition": "the mean gain clears both thresholds but the paired per-fold differences are not all in the same direction",
+      "on_fail_or_inconclusive": "operational_model = persistence",
+      "boundary": "These thresholds are engineering acceptance criteria applied after the fact. They are not a statistical significance test and they are not prospective generalization evidence."
+    },
+    "regime_analysis_use": "descriptive error analysis only; it must never become a post-hoc selection gate",
+    "final_refit": {
+      "rule": "The selected trial id is frozen, then preprocessing and the estimator are refitted on ALL eligible historical-development windows before export.",
+      "forbidden": "exporting the estimator fitted on the last fold's train block",
+      "forbidden_reason": "The last fold's estimator saw only a prefix of the record. Shipping it means the deployed weights were never fitted on the data the selection claims to be based on.",
+      "prospective_quarantine_scored": false
+    },
+    "parity_gate": {
+      "status": "hard eligibility gate",
+      "rule": "A candidate whose neutral-runtime parity error exceeds the configured tolerance for its export type is INELIGIBLE. It is not exported as the operational bundle and not exported as the learned challenger.",
+      "on_no_eligible_operational_bundle": "return a nonzero exit status"
+    }
+  },
+
+  "packet": {
+    "manifest_filename": "colab_packet_manifest.json",
+    "manifest_location": "inside the packet directory",
+    "source_archive": "halo_safeshift-source.zip",
+    "allowed_extra_files": [],
+    "allowed_extra_files_note": "Any file inside the packet that the manifest does not declare is a verification failure. An undeclared file is either a leftover from another run or an injection; neither may reach a training environment unnoticed.",
+    "source_archive_contents": [
+      "prototype/halo_safeshift/**/*.py",
+      "prototype/halo_safeshift/config/*.json",
+      "prototype/halo_safeshift/requirements-colab*.txt"
+    ],
+    "source_archive_excludes": ["__pycache__", "*.pyc", "tests/__pycache__"],
+    "source_archive_determinism": {
+      "zip_date_time": [1980, 1, 1, 0, 0, 0],
+      "compress_type": "deflate",
+      "compresslevel": 9,
+      "external_attr": 436,
+      "create_system": 3,
+      "entry_order": "sorted by archive-relative POSIX path",
+      "reason": "ZIP stores a modification time and a creator platform per entry. With real timestamps, identical source produces different archive bytes on every build, so the archive hash could never prove that Colab received the same code. Every varying field is pinned."
+    },
+    "why_an_archive": "The repository working tree carries uncommitted SafeShift source, so cloning git HEAD in Colab does NOT reproduce the code that produced this packet. The archive transports the exact bytes and its hash is what the code manifest attests."
+  },
+
+  "envelope": {
+    "filename": "bundle_envelope.json",
+    "purpose": "manifest.json carries prediction-relevant metadata (model type, feature width, output transform index, tree counts). A bundle that verifies only against its own manifest cannot detect a manifest that was edited. The envelope is an outer, independently hashed attestation of manifest.json, every bundle sibling, the runtime source files needed for inference, and the config.",
+    "runtime_source_files": [
+      "prototype/halo_safeshift/inference.py",
+      "prototype/halo_safeshift/contracts.py",
+      "prototype/halo_safeshift/tree_export.py"
+    ],
+    "runtime_source_files_note": "inference.py imports the shared structural contracts rather than restating them, so all three files are part of what executes a prediction. Listing only the entry point would attest less than actually runs.",
+    "cross_checked_fields": [
+      "model_type",
+      "n_features",
+      "feature_schema_sha256",
+      "output_transform",
+      "model_params.n_trees",
+      "model_params.n_nodes",
+      "preprocessing_kind",
+      "run_id",
+      "config_id"
+    ]
+  },
+
+  "validation": {
+    "preprocessing": {
+      "required_shape": "(n_features,)",
+      "mean_scale_finite": true,
+      "scale_strictly_positive": true,
+      "clipping_arrays_all_or_none": true,
+      "clip_min_le_clip_max": true,
+      "json_must_agree_with_npz": true
+    },
+    "tree_ensemble": {
+      "equal_node_array_lengths": true,
+      "offsets_start_at_zero": true,
+      "offsets_non_decreasing": true,
+      "final_offset_equals_node_count": true,
+      "root_exists_per_tree": true,
+      "children_inside_own_tree": true,
+      "leaf_has_no_children": true,
+      "internal_feature_index_in_range": true,
+      "internal_threshold_finite": true,
+      "missing_go_to_in_zero_or_one": true,
+      "manifest_counts_match_arrays": true,
+      "missing_value_routing_policy": "inert_under_finite_input_policy",
+      "missing_value_routing_policy_reason": "The runtime rejects any non-finite input before a tree is traversed, so the missing_go_to branch is unreachable in this deployment. The field is retained because an exporter must still record what the source library would have done, but the runtime must not be described as supporting missing values."
+    }
+  },
+
+  "seed": 20260815,
+
+  "tolerances": {
+    "linear_fp64_max_abs_error": 1e-10,
+    "linear_fp32_max_abs_error": 1e-5,
+    "mlp_fp32_max_abs_error": 1e-5,
+    "tree_ensemble_fp64_max_abs_error": 1e-10,
+    "xgboost_tree_ensemble_fp64_max_abs_error": 1e-6,
+    "xgboost_tolerance_reason": "XGBoost accumulates leaf values in float32 internally, so an exact float64 reproduction is not achievable. The looser bound is declared here rather than discovered during a Colab run.",
+    "parity_probe_vectors": 8,
+    "hash_prefix_length": 16
+  },
+
+  "export": {
+    "allowed_model_types": ["persistence", "linear", "mlp_relu", "tree_ensemble"],
+    "runtime_dependencies": ["python_standard_library", "numpy"],
+    "forbidden_runtime_dependencies": ["scikit-learn", "xgboost", "pandas", "pickle"],
+    "npz_allow_pickle": false,
+    "tree_decision_rules": ["left_if_le", "left_if_lt"],
+    "sklearn_tree_decision_rule": "left_if_le",
+    "xgboost_tree_decision_rule": "left_if_lt",
+    "tree_split_comparison_dtypes": ["float32", "float64"],
+    "tree_split_comparison_dtype": "float32",
+    "tree_split_comparison_dtype_reason": "scikit-learn casts the feature matrix to float32 (`sklearn.tree._tree.DTYPE`) before traversing a tree, and XGBoost is float32 internally as well. Comparing in float64 therefore routes any sample lying within one float32 rounding step of a split threshold down the OTHER branch, and the result is a plausible-looking wrong prediction rather than an error. Measured on real standardized station features this produced a 0.134 degC disagreement while random N(0,1) probe data showed none, because random data rarely lands that close to a threshold. The neutral runtime reproduces the source library's comparison width."
+  },
+
+  "declared_deviations_from_technical_design": [
+    {
+      "id": "DEV-1",
+      "design_says": "Split by complete UTC calendar days: oldest 60% train, next 20% validation, newest 20% test; evaluate the frozen winner on test exactly once (section 3).",
+      "this_config_does": "Expanding-window blocked folds with a two-sided 90-minute embargo, over historical_development only, plus a separate prospective recovery quarantine.",
+      "reason": "Orchestrator instruction for this run: the historical final dates have already been examined by an external verifier, so no artifact may be named or treated as an untouched test.",
+      "status": "reported to the orchestrator; the authority document was NOT edited to match the implementation."
+    },
+    {
+      "id": "DEV-3",
+      "design_says": "Pull with benchmarks/halo/pull_station_history.py into its existing ignored cache (section 3).",
+      "this_config_does": "Freezes with the new benchmarks/halo/freeze_station_history.py; pull_station_history.py is left byte-identical to HEAD.",
+      "reason": "evidence/halo-probe-2026-08-11/result.json pins the SHA-256 of pull_station_history.py as a producer of the 2026-08-11 probe, and benchmarks/validate_agent_docs.py verifies it. Editing that script in place failed the repository gate with 'producer_sha256 hash mismatch'. The only edit that would silence it is changing the frozen evidence file to claim a script written today produced a probe from 2026-08-11, which would be falsifying provenance.",
+      "status": "reported to the orchestrator; neither the authority document nor the frozen evidence artifact was edited. Reversible: if the orchestrator prefers the in-place edit, move this file's contents back and decide separately what to do about the probe's provenance chain."
+    },
+    {
+      "id": "DEV-2",
+      "design_says": "P0 learned candidates are limited to Ridge and small MLPs (section 5).",
+      "this_config_does": "Declares a wider registry (ridge, elastic_net, gradient_boosting, extra_trees, xgboost_optional, mlp_relu) for the later Colab worker.",
+      "reason": "Orchestrator instruction. All declared families still export to the dependency-light NumPy runtime types, so the deployment constraint in the design is preserved.",
+      "status": "reported to the orchestrator; no family is selected on this machine."
+    },
+    {
+      "id": "DEV-4",
+      "design_says": "Nothing about a source archive; the design assumes the Colab worker obtains the package from the repository.",
+      "this_config_does": "Ships a deterministic ZIP of the package inside the packet and attests its SHA-256 in both the packet manifest and the code manifest.",
+      "reason": "The working tree contains uncommitted SafeShift source. Cloning git HEAD in Colab would silently run different code from the code that produced the packet, and the code manifest's per-file hashes would have nothing to verify against.",
+      "status": "reported to the orchestrator; no authority document was edited."
+    },
+    {
+      "id": "DEV-5",
+      "design_says": "The recovery split is described in terms of the observation record.",
+      "this_config_does": "Derives the boundary from RAW feed timestamps before any QC, and records the QC-admitted continuity separately as a distinct, non-interchangeable quantity.",
+      "reason": "Correction instruction. Sensor rows that fail QC still prove the station was posting; letting QC decide the boundary lets bad readings manufacture an outage. In the current record the two boundaries coincide, which is a property of this data and NOT evidence that the earlier implementation was correct.",
+      "status": "reported to the orchestrator."
+    }
+  ]
+}

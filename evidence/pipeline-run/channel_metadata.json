@@ -1,0 +1,71 @@
+{
+  "artifact": "channel_metadata.json",
+  "fetched_utc": "2026-08-15T19:06:23.326249Z",
+  "source_url": "https://api.thingspeak.com/channels/3428136/feeds.json?results=8000&status=true",
+  "channel": {
+    "id": 3428136,
+    "name": "MakerLab Giadinh Station",
+    "latitude": "0.0",
+    "longitude": "0.0",
+    "field1": "WindSpeed",
+    "field2": "WindDirection",
+    "field3": "Temperature",
+    "field4": "Pressure",
+    "field5": "Light",
+    "field6": "Humidity",
+    "field7": "Noise",
+    "field8": "PM2.5",
+    "created_at": "2026-07-15T10:04:12Z",
+    "updated_at": "2026-08-08T11:11:30Z",
+    "last_entry_id": 96659
+  },
+  "reused_source_freeze": {
+    "mode": "reused immutable source freeze",
+    "reused_csv_path": "benchmarks/halo/_cache/20260815T170833Z-99afc2c/station_raw.csv",
+    "reused_csv_sha256": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "reused_metadata_path": "evidence/halo-safeshift/20260815T170833Z-99afc2c/channel_metadata.json",
+    "reused_metadata_sha256": "15eb5ce5fd57afc0cf20c5fff4fcd2e57ea7c8643fb6e240a0a5cb9da32b6f63",
+    "previous_source_manifest": {
+      "path": "evidence/halo-safeshift/20260815T170833Z-99afc2c/data_manifest.json",
+      "sha256": "c7c1b014bbafb75d14c548b2d875b0c3179da048aa100d92b1f42c55fe1529e5"
+    },
+    "network_calls": 0,
+    "live_data_appended": false,
+    "boundary": "The bytes were acquired by the earlier run recorded in previous_source_manifest. This manifest was produced by the current version of this script reading those bytes offline. integrity.puller_* identifies what produced THIS manifest; acquisition identifies what pulled the data. Conflating the two would let a corrected script claim credit for a pull it never made."
+  },
+  "field_mapping_from_metadata": {
+    "field1": {
+      "label": "WindSpeed",
+      "semantic": "wind_speed"
+    },
+    "field2": {
+      "label": "WindDirection",
+      "semantic": "wind_direction"
+    },
+    "field3": {
+      "label": "Temperature",
+      "semantic": "temperature"
+    },
+    "field4": {
+      "label": "Pressure",
+      "semantic": "pressure"
+    },
+    "field5": {
+      "label": "Light",
+      "semantic": "light"
+    },
+    "field6": {
+      "label": "Humidity",
+      "semantic": "humidity"
+    },
+    "field7": {
+      "label": "Noise",
+      "semantic": "noise"
+    },
+    "field8": {
+      "label": "PM2.5",
+      "semantic": "pm25"
+    }
+  },
+  "boundary": "Channel metadata is recorded verbatim. Field semantics are resolved from the published labels, never from field position."
+}

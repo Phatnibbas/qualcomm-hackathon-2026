@@ -1,0 +1,30 @@
+# HALO SafeShift — OPTIONAL XGBoost extra for Colab.
+#
+# Install ONLY when the operator has explicitly opted in:
+#     pip install -r requirements-colab.txt
+#     pip install -r requirements-colab-xgboost.txt
+#     python -m prototype.halo_safeshift.colab_train ... --enable-xgboost
+#
+# Installing this file is not sufficient to make XGBoost eligible. Without
+# --enable-xgboost the four XGBoost trials stay excluded from the curated trial
+# list and the policy status stays `skipped_by_policy`. With the flag, the
+# candidate is still ineligible until:
+#
+#   1. the installed version equals the pin below (a different build can change
+#      split semantics, so parity proven against one version does not transfer);
+#   2. the dedicated neutral-export parity probe passes on every deterministic
+#      probe vector, within tolerances.xgboost_tree_ensemble_fp64_max_abs_error;
+#   3. the fitted booster declares no categorical split, is single-output, and
+#      needs no missing-value routing the finite-input runtime cannot reach.
+#
+# License: Apache-2.0 (PyPI `license_expression` for 3.4.1, read 2026-08-15).
+# Record it as a training-time third-party dependency for the disclosure review
+# required by Official Rules section 9.f-g if any XGBoost-derived artifact
+# reaches the submission.
+#
+# Version 3.4.1 is the current PyPI release, read from the PyPI JSON API on
+# 2026-08-15. It is NOT installed on the local preparation machine, so
+# `tree_export.export_xgboost_regressor` has never been executed against it and
+# its parity test is SKIPPED locally, not passing.
+
+xgboost==3.4.1

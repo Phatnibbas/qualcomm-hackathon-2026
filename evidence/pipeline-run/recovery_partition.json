@@ -1,0 +1,133 @@
+{
+  "artifact": "recovery_partition.json",
+  "run_id": "20260815T190622Z-99afc2c",
+  "config_id": "experiment.v1",
+  "rule": "recovery_start = timestamp of the first raw observation after the latest gap longer than outage.long_outage_hours",
+  "boundary_source": "raw feed timestamps",
+  "long_outage_hours": 6.0,
+  "observations": 96659,
+  "first_observation_utc": "2026-07-15T10:18:20Z",
+  "last_observation_utc": "2026-08-15T17:08:25Z",
+  "long_outages": [
+    {
+      "gap_start_utc": "2026-08-14T13:48:20Z",
+      "gap_end_utc": "2026-08-15T16:12:18Z",
+      "gap_hours": 26.3994
+    }
+  ],
+  "latest_long_outage": {
+    "gap_start_utc": "2026-08-14T13:48:20Z",
+    "gap_end_utc": "2026-08-15T16:12:18Z",
+    "gap_hours": 26.3994
+  },
+  "recovery_start_utc": "2026-08-15T16:12:18Z",
+  "recovery_context": {
+    "cause": "user-confirmed manual station reset",
+    "firmware_root_cause": "unresolved",
+    "boundary": "The station resuming after a manual reset is not evidence that the firmware hang is fixed. Only the outage interval, the first entry after recovery and the current data state are recorded."
+  },
+  "boundary_source_rule": "The recovery boundary is derived from the frozen raw feed after timestamp parsing, removal of unparsable timestamps and deterministic duplicate handling ONLY. It is computed before wind-epoch filtering, before required-channel QC, before physical-range QC and before any sensor-field validation.",
+  "boundary_source_reason": "An outage means the station stopped POSTING. Sensor values that fail QC still prove the station was alive and posting, so letting QC decide the boundary lets a run of bad readings manufacture an outage that never happened. Feed continuity and admitted-data continuity are recorded separately and are not interchangeable.",
+  "raw_feed_recovery_boundary": "2026-08-15T16:12:18Z",
+  "raw_feed_timeline_counts": {
+    "rows_input": 96659,
+    "dropped_unparsable_timestamp": 0,
+    "dropped_duplicate_entry_id": 0,
+    "rows_in_timeline": 96659
+  },
+  "qc_admitted_continuity": {
+    "boundary_source": "QC-admitted rows",
+    "role": "reported for comparison only; it does not decide the split",
+    "recovery_start_utc": "2026-08-15T16:12:18Z",
+    "first_observation_utc": "2026-07-21T15:42:03Z",
+    "last_observation_utc": "2026-08-15T17:08:25Z",
+    "observations": 74416,
+    "long_outages": [
+      {
+        "gap_start_utc": "2026-08-14T13:48:20Z",
+        "gap_end_utc": "2026-08-15T16:12:18Z",
+        "gap_hours": 26.3994
+      }
+    ]
+  },
+  "boundaries_agree": true,
+  "boundaries_agree_note": "Agreement between the raw-feed boundary and the QC-admitted boundary is a property of this particular record. It is NOT evidence that deriving the boundary from admitted rows would be correct in general, and it must not be cited as validating an earlier implementation.",
+  "partition": {
+    "historical_development": {
+      "path": "evidence/halo-safeshift/20260815T190622Z-99afc2c/historical_development.csv",
+      "sha256": "cce12ec0cb8df6ed330e0c84080f1d275fa0bf3141612f2e03493db137143ed0",
+      "n_bins": 6800,
+      "n_valid_bins": 6789,
+      "first_bin_utc": "2026-07-21T15:45:00Z",
+      "last_bin_utc": "2026-08-14T13:50:00Z",
+      "n_eligible_windows": 6633
+    },
+    "prospective_quarantine": {
+      "path": "evidence/halo-safeshift/20260815T190622Z-99afc2c/prospective_quarantine.csv",
+      "sha256": "5d4da4b27cde211a41ae816465eb3724aecaa6db195a60a87d11de6ca4031978",
+      "permitted_inspection": [
+        "schema_correctness",
+        "timestamps",
+        "missing_fields",
+        "ingestion_continuity",
+        "window_formability"
+      ],
+      "forbidden_use": [
+        "model_performance_metrics",
+        "model_selection",
+        "feature_selection",
+        "threshold_selection",
+        "hyperparameter_selection"
+      ],
+      "n_bins": 12,
+      "n_valid_bins": 12,
+      "first_bin_utc": "2026-08-15T16:15:00Z",
+      "last_bin_utc": "2026-08-15T17:10:00Z",
+      "columns": [
+        "bin_end_utc",
+        "n_raw",
+        "wind_speed",
+        "wind_direction",
+        "temperature",
+        "pressure",
+        "light",
+        "humidity",
+        "noise",
+        "pm25",
+        "apparent_temperature_c",
+        "n_valid_wind_speed",
+        "n_valid_wind_direction",
+        "n_valid_temperature",
+        "n_valid_pressure",
+        "n_valid_light",
+        "n_valid_humidity",
+        "n_valid_noise",
+        "n_valid_pm25",
+        "last_obs_utc",
+        "staleness_seconds",
+        "valid",
+        "invalid_reason",
+        "expected_raw_observations_per_bin"
+      ],
+      "schema_matches_historical": true,
+      "null_counts": {
+        "wind_speed": 0,
+        "wind_direction": 0,
+        "temperature": 0,
+        "pressure": 0,
+        "light": 0,
+        "humidity": 0,
+        "noise": 0,
+        "pm25": 0,
+        "apparent_temperature_c": 0,
+        "staleness_seconds": 0
+      },
+      "contiguous_bin_run_max": 12,
+      "bins_required_for_one_window": 18,
+      "enough_bins_for_one_future_window": false,
+      "metrics_computed": false,
+      "note": "Inspection only. No model-performance metric was computed on this partition and none of its target values informed any modelling choice."
+    }
+  },
+  "naming_note": "No artifact in this run is called an untouched test. The historical final dates have already been examined by an external verifier, so this is retrospective model development."
+}

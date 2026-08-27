@@ -1,0 +1,50 @@
+{
+  "artifact": "local_smoke_report.json",
+  "STATUS_BANNER": [
+    "NOT PERFORMANCE EVIDENCE",
+    "NOT FINAL MODEL SELECTION",
+    "NOT UNO Q INFERENCE"
+  ],
+  "purpose": "Execute each code path once on a tiny subset so that a broken path fails here rather than in Colab. Deliberately reports no error metric of any kind: a quality number computed here could be mistaken for a result.",
+  "paths": {
+    "persistence": true,
+    "climatology_local_time": true,
+    "climatology_fitted_on_n_train_samples": 400,
+    "residual_parameterization": true,
+    "gradient_boosting_export": true,
+    "extra_trees_export": true,
+    "mlp_relu_export": true,
+    "preprocessing_fitted_inside_fold": true,
+    "linear_export": true,
+    "persistence_export": true,
+    "bundle_envelope_verified_on_load": true,
+    "numpy_runtime_load_and_predict": true,
+    "executed": true
+  },
+  "numerical_parity": {
+    "residual_round_trip_max_abs_error": 0.0,
+    "linear_fp64_max_abs_error": 0.0,
+    "gradient_boosting_max_abs_error": 1.4210854715202004e-14,
+    "gradient_boosting_tolerance": 1e-10,
+    "gradient_boosting_within_tolerance": true,
+    "extra_trees_max_abs_error": 0.0,
+    "extra_trees_tolerance": 1e-10,
+    "extra_trees_within_tolerance": true,
+    "mlp_relu_max_abs_error": 0.0,
+    "mlp_relu_tolerance": 1e-05,
+    "mlp_relu_within_tolerance": true
+  },
+  "unavailable_optional_dependencies": [
+    "xgboost_optional"
+  ],
+  "subset": {
+    "fold_index": 0,
+    "train_samples_used": 400,
+    "validation_samples_used": 200
+  },
+  "explicitly_not_reported": [
+    "MAE, RMSE or any other error metric",
+    "any comparison between model families",
+    "any ranking or selection"
+  ]
+}

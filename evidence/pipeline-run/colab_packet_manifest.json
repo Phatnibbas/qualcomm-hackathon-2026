@@ -1,0 +1,34 @@
+{
+  "artifact": "colab_packet_manifest.json",
+  "run_id": "20260815T190622Z-99afc2c",
+  "config_id": "experiment.v1",
+  "created_utc": "2026-08-15T19:06:49.826286Z",
+  "packet_dir": "evidence/halo-safeshift/20260815T190622Z-99afc2c/colab-input",
+  "files": {
+    "station_raw.csv": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "channel_metadata.json": "25f2fc658667960c13153809ad23a4b503f82718721d12ae3d76189b57066b1b",
+    "data_manifest.json": "2c8e97ebdfdf7c25b6a748c61067b21713d158f4aec7c29c6b53e3024c524479",
+    "qc_report.json": "519024d748e3df3bf0561400a1353f23d8a6a8db2ad69925046fd0fbb3a69057",
+    "recovery_partition.json": "5f8c1857f5c0eb376d442b8509763427c234e1a33aef2659cf847e809f784fc9",
+    "experiment.v1.json": "81af5e597c2deb54885736838b89f175d8c17999db28b94379173e1f3d6d89ed",
+    "source_manifest.json": "d84fa055abfb078165c8f8c4032e9e2cbb776b07ec7271568602b4e0f8193389",
+    "code_manifest.json": "601d4da26ea5e5b91dd2c9cb6702839d13155d548eae326e7a3419f2911eaac8",
+    "halo_safeshift-source.zip": "7c4ad03e73a4a1112dd3facb736834f79a15f91a9743b5d1c2ce314a9b27bf45",
+    "bootstrap.py": "2ca4f1e262eb9d0e4d6bb178518dfd88c6448871e52751107815dd69795fe529"
+  },
+  "immutability": "Every file above is hashed. A Colab run that changes any of them is a different run and needs a new run id.",
+  "self_verification": {
+    "command": "python -m prototype.halo_safeshift.verify_packet --packet colab-input",
+    "manifest_location": "inside the packet, so the packet verifies itself",
+    "undeclared_files": "rejected; see packet.allowed_extra_files_note"
+  },
+  "colab_contract": [
+    "python colab-input/bootstrap.py --packet colab-input --root .",
+    "python -m prototype.halo_safeshift.verify_packet --packet colab-input",
+    "python -m prototype.halo_safeshift.colab_train --packet colab-input --out artifacts/halo-safeshift/<run-id>"
+  ],
+  "boundary": [
+    "Input packet only. It contains no trained model and no metric.",
+    "The Colab worker must import prototype/halo_safeshift, not reimplement it."
+  ]
+}

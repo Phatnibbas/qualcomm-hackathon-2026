@@ -1,0 +1,32 @@
+{
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "python": "3.12.10",
+    "node": "<redacted-workstation>"
+  },
+  "repo_interpreter": {
+    "python": "3.12.10",
+    "numpy": "2.2.6",
+    "satpy": "not installed",
+    "pyproj": "not installed"
+  },
+  "isolated_decode_venv": {
+    "path": "<local-scratch>/satvenv/Scripts/python.exe",
+    "purpose": "Satpy reference decode only; no project or global dependency was added",
+    "python": "3.12.10",
+    "satpy": "0.60.0",
+    "pyproj": "3.7.2",
+    "numpy": "2.5.2",
+    "xarray": "2026.7.0",
+    "dask": "2026.7.1"
+  },
+  "board": {
+    "hostname": "qualcomm",
+    "machine": "aarch64",
+    "python": "3.13.5",
+    "numpy_present": false,
+    "satpy_installed": false,
+    "note": "Satpy was deliberately NOT installed on the UNO Q; only the compact context JSON and the stdlib-only dashboard were copied."
+  }
+}

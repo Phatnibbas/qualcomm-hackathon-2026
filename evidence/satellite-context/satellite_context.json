@@ -1,0 +1,164 @@
+{
+  "schema_version": "halo-satellite-context-v1",
+  "mode": "satellite-context-not-fused",
+  "generated_utc": "2026-08-16T02:13:04.863369+00:00",
+  "source": {
+    "platform": "Himawari-9",
+    "product": "AHI-L1b-FLDK",
+    "bucket": "https://noaa-himawari9.s3.amazonaws.com",
+    "bands": [
+      "B13",
+      "B08"
+    ],
+    "resolution": "R20",
+    "segments": [
+      4
+    ],
+    "total_segments": 10
+  },
+  "location": {
+    "latitude": 10.7986848,
+    "longitude": 106.6961223,
+    "roi_km": 25.0,
+    "coordinate_basis": "Google Maps feature for MakerLab.vn resolved 2026-08-15; not a GNSS survey at the sensor head.",
+    "distance_model": "great-circle on a sphere of radius 6371.0088 km; under 0.3 % from a WGS84 geodesic at 25.0 km, far below the 2 km pixel"
+  },
+  "timing": {
+    "nominal_scan_utc": "2026-08-09T07:00:00+00:00",
+    "assumed_scan_completion_minutes": 10,
+    "assumed_scan_completion_utc": "2026-08-09T07:10:00+00:00",
+    "issue_time_utc": "2026-08-09T07:45:00+00:00",
+    "publication_lag_assumption_minutes": 20,
+    "effective_available_utc": "2026-08-09T07:30:00+00:00",
+    "available_strictly_before_issue": true,
+    "frame_age_minutes": 35.0,
+    "nominal_to_issue_minutes": 45.0,
+    "publication_lag_sensitivity": [
+      {
+        "publication_lag_minutes": 0,
+        "effective_available_utc": "2026-08-09T07:10:00+00:00",
+        "available_strictly_before_issue": true
+      },
+      {
+        "publication_lag_minutes": 10,
+        "effective_available_utc": "2026-08-09T07:20:00+00:00",
+        "available_strictly_before_issue": true
+      },
+      {
+        "publication_lag_minutes": 20,
+        "effective_available_utc": "2026-08-09T07:30:00+00:00",
+        "available_strictly_before_issue": true
+      },
+      {
+        "publication_lag_minutes": 30,
+        "effective_available_utc": "2026-08-09T07:40:00+00:00",
+        "available_strictly_before_issue": true
+      }
+    ],
+    "scan_timing_note": "AHI sweeps the disc within its 10-minute timeline, so the nominal timestamp is not the instant this site was observed. Frame age is a measured lag, not a warning lead time."
+  },
+  "features": {
+    "B13": {
+      "min": 203.5358,
+      "p10": 205.9862,
+      "p25": 208.7451,
+      "p50": 212.9993,
+      "p75": 216.7863,
+      "p90": 221.9355,
+      "max": 229.7143,
+      "mean": 213.2835,
+      "std": 5.8127,
+      "unit": "K",
+      "roi_pixels": 339,
+      "finite_pixels": 339,
+      "physical_qc_removed_pixels": 0,
+      "valid_fraction": 1.0,
+      "physical_qc_range_kelvin": [
+        180.0,
+        330.0
+      ],
+      "physical_qc_note": "Pixels outside this range are removed as a physical decode quality control. This is not a cloud threshold and yields no cloud, storm or rain classification."
+    },
+    "B08": {
+      "min": 203.8883,
+      "p10": 205.9912,
+      "p25": 207.9149,
+      "p50": 210.9391,
+      "p75": 213.6222,
+      "p90": 217.6958,
+      "max": 222.4191,
+      "mean": 211.3338,
+      "std": 4.2077,
+      "unit": "K",
+      "roi_pixels": 339,
+      "finite_pixels": 339,
+      "physical_qc_removed_pixels": 0,
+      "valid_fraction": 1.0,
+      "physical_qc_range_kelvin": [
+        180.0,
+        330.0
+      ],
+      "physical_qc_note": "Pixels outside this range are removed as a physical decode quality control. This is not a cloud threshold and yields no cloud, storm or rain classification."
+    }
+  },
+  "temporal_deltas_available": false,
+  "objects": [
+    {
+      "key": "AHI-L1b-FLDK/2026/08/09/0700/HS_H09_20260809_0700_B13_FLDK_R20_S0410.DAT.bz2",
+      "url": "https://noaa-himawari9.s3.amazonaws.com/AHI-L1b-FLDK/2026/08/09/0700/HS_H09_20260809_0700_B13_FLDK_R20_S0410.DAT.bz2",
+      "cached_path": "<local-scratch>/himawari-cache/AHI-L1b-FLDK_2026_08_09_0700_HS_H09_20260809_0700_B13_FLDK_R20_S0410.DAT.bz2",
+      "bytes": 3128886,
+      "sha256": "d4d5feba6ec8ff994e3b3b279f7bed327d03c75962784d30c162d995f6a697a7",
+      "download_seconds": 0.0,
+      "band": "B13",
+      "segment": 4
+    },
+    {
+      "key": "AHI-L1b-FLDK/2026/08/09/0700/HS_H09_20260809_0700_B08_FLDK_R20_S0410.DAT.bz2",
+      "url": "https://noaa-himawari9.s3.amazonaws.com/AHI-L1b-FLDK/2026/08/09/0700/HS_H09_20260809_0700_B08_FLDK_R20_S0410.DAT.bz2",
+      "cached_path": "<local-scratch>/himawari-cache/AHI-L1b-FLDK_2026_08_09_0700_HS_H09_20260809_0700_B08_FLDK_R20_S0410.DAT.bz2",
+      "bytes": 1347196,
+      "sha256": "786bca44495d704c61c0f09b7910faca389f7f06d57be4a6c0d47ca881077b1d",
+      "download_seconds": 3.113,
+      "band": "B08",
+      "segment": 4
+    }
+  ],
+  "decoder": {
+    "reader": "satpy.ahi_hsd",
+    "satpy_version": "0.60.0",
+    "numpy_version": "2.5.2",
+    "per_band": {
+      "B13": {
+        "satpy_dataset": "B13",
+        "calibration": "brightness_temperature",
+        "units": "K",
+        "wavelength_um": 10.4,
+        "shape": [
+          5500,
+          5500
+        ],
+        "start_time_utc": "2026-08-09T07:00:00+00:00",
+        "end_time_utc": "2026-08-09T07:10:00+00:00",
+        "decode_seconds": 26.106
+      },
+      "B08": {
+        "satpy_dataset": "B08",
+        "calibration": "brightness_temperature",
+        "units": "K",
+        "wavelength_um": 6.2,
+        "shape": [
+          5500,
+          5500
+        ],
+        "start_time_utc": "2026-08-09T07:00:00+00:00",
+        "end_time_utc": "2026-08-09T07:10:00+00:00",
+        "decode_seconds": 11.978
+      }
+    },
+    "why_not_repo_reader": "benchmarks/halo/hsd.py has never passed a pixel-level reference comparison and admits sub-180 K pixels, so it may not produce any value that reaches a dashboard."
+  },
+  "total_seconds": 54.305,
+  "satellite_used_in_prediction": false,
+  "claim_boundary": "Descriptive satellite context only; not fused inference or established warning lead time. The forecast shown beside it is persistence and does not read any satellite value."
+}

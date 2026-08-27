@@ -1,0 +1,19 @@
+# Station credentials. The firmware imports these from the board; they are never
+# committed. Copy firmware/station_secrets.example.py and fill it in locally.
+firmware/station_secrets.py
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local satellite cache. Every object is re-downloadable from the public NOAA
+# bucket; the manifest in evidence/satellite-context/ carries the SHA-256 of each.
+*.DAT.bz2
+himawari-cache/
+
+# Runtime output produced on the board
+*.log

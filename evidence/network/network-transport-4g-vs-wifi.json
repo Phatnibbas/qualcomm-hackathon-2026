@@ -1,0 +1,51 @@
+{
+  "what_this_measures": "transport time for one fixed historical HSD segment",
+  "what_this_does_not_measure": "publication latency (V-5), and conditions at the venue during the demo",
+  "provenance": {
+    "command": "benchmarks/halo/measure_network.py --network laptop-home-wifi-paired-with-board-4g-run --runs 3 --note paired comparison against board B on <hotspot-ssid> 4G hotspot, same hour",
+    "generated_at_utc": "2026-08-14T10:52:22Z",
+    "git_head": "99afc2cf7b3661fbf6ef234714240d297d391ee2",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "conditions": {
+    "network_label": "laptop-home-wifi-paired-with-board-4g-run",
+    "note": "paired comparison against board B on <hotspot-ssid> 4G hotspot, same hour",
+    "object": "AHI-L1b-FLDK/2026/08/09/0700/HS_H09_20260809_0700_B13_FLDK_R20_S0410.DAT.bz2"
+  },
+  "runs": [
+    {
+      "ok": true,
+      "connect_and_first_response_s": 1.012,
+      "download_s": 3.743,
+      "decompress_s": 0.745,
+      "total_s": 5.501,
+      "compressed_bytes": 3128886,
+      "decompressed_bytes": 6051533,
+      "download_MiB_per_s": 0.797
+    },
+    {
+      "ok": true,
+      "connect_and_first_response_s": 0.781,
+      "download_s": 2.218,
+      "decompress_s": 0.67,
+      "total_s": 3.669,
+      "compressed_bytes": 3128886,
+      "decompressed_bytes": 6051533,
+      "download_MiB_per_s": 1.346
+    },
+    {
+      "ok": true,
+      "connect_and_first_response_s": 0.813,
+      "download_s": 2.911,
+      "decompress_s": 0.818,
+      "total_s": 4.541,
+      "compressed_bytes": 3128886,
+      "decompressed_bytes": 6051533,
+      "download_MiB_per_s": 1.025
+    }
+  ],
+  "successful_runs": 3,
+  "median_total_s": 4.541,
+  "slowest_total_s": 5.501
+}

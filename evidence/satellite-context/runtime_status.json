@@ -1,0 +1,194 @@
+{
+  "run_utc": "2026-08-16T02:11:17Z",
+  "what_ran": "zero-training Himawari-9 satellite context served beside a persistence forecast",
+  "claim_level": "descriptive satellite context only; NOT fused inference, NOT a validated satellite arm, NOT a warning lead time",
+  "satellite_used_in_prediction": false,
+  "tests": {
+    "new_satellite_context_tests": {
+      "ran": 29,
+      "result": "OK"
+    },
+    "required_regression_suite": {
+      "ran": 21,
+      "result": "OK",
+      "modules": [
+        "test_full_pipeline_contracts",
+        "test_full_runtime",
+        "test_full_notebook",
+        "test_full_bundle"
+      ]
+    },
+    "whole_package_suite": {
+      "ran": 288,
+      "failures": 2,
+      "result": "2 PRE-EXISTING failures"
+    },
+    "pre_existing_failures": [
+      {
+        "test": "test_corrections.TestXGBoostOptIn.test_enabling_alone_does_not_make_it_eligible",
+        "reason": "XGBoostPolicyError not raised; surfaces only because xgboost 3.4.1 is installed locally"
+      },
+      {
+        "test": "test_tree_export.TestOptionalXgboost.test_xgboost_parity_is_skipped_with_an_explicit_reason",
+        "reason": "portable-export parity 1.394 vs 1e-5 tolerance; the already-recorded XGBoost parity defect that is why XGBoost is marked BLOCKED"
+      }
+    ],
+    "pre_existing_evidence": "Neither failing module references satellite_context (grep count 0), and no file under prototype/ was modified - only three new files were added."
+  },
+  "noaa_download": {
+    "bucket": "https://noaa-himawari9.s3.amazonaws.com",
+    "product": "AHI-L1b-FLDK",
+    "resolution": "R20",
+    "segments": [
+      4
+    ],
+    "bands": [
+      "B13",
+      "B08"
+    ],
+    "objects": [
+      {
+        "band": "B13",
+        "segment": 4,
+        "bytes": 3128886,
+        "sha256": "d4d5feba6ec8ff99"
+      },
+      {
+        "band": "B08",
+        "segment": 4,
+        "bytes": 1347196,
+        "sha256": "786bca44495d704c"
+      }
+    ],
+    "note": "full SHA-256 values are in satellite_context.json; the raw .bz2 objects stay in a scratchpad cache and are not in git or evidence"
+  },
+  "satpy_decode": {
+    "reader": "satpy.ahi_hsd",
+    "satpy_version": "0.60.0",
+    "calibration": "brightness_temperature",
+    "B13_wavelength_um": 10.4,
+    "B08_wavelength_um": 6.2,
+    "roi_km": 25.0,
+    "roi_pixels": 339,
+    "roi_clipped": false,
+    "physical_qc_removed_pixels": 0,
+    "physical_qc_significance": "Satpy removed zero pixels from the [180,330] K physical range. benchmarks/halo/hsd.py produced 4.49 % of pixels below 180 K on this product, which is direct evidence for excluding the unvalidated reader from anything that reaches a dashboard.",
+    "total_seconds": 54.305
+  },
+  "timing_contract": {
+    "nominal_scan_utc": "2026-08-09T07:00:00+00:00",
+    "assumed_scan_completion_minutes": 10,
+    "publication_lag_assumption_minutes": 20,
+    "effective_available_utc": "2026-08-09T07:30:00+00:00",
+    "issue_time_utc": "2026-08-09T07:45:00+00:00",
+    "available_strictly_before_issue": true,
+    "frame_age_minutes_from_completion": 35.0,
+    "frame_age_minutes_from_nominal_scan": 45.0,
+    "lag_sensitivity_minutes": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "note": "Frame age is a measured lag. It is not a warning lead time in either direction."
+  },
+  "forecast": {
+    "method": "persistence",
+    "rule": "AT(t+30) = AT(t)",
+    "horizon_minutes": 30,
+    "current_at_degc": 32.675,
+    "predicted_at_plus30_degc": 32.675,
+    "station_inputs": {
+      "temperature_degc": 28.2,
+      "humidity_percent": 86.3,
+      "wind_mps": 3.4
+    },
+    "non_fusion_proof": "The forecast is 32.675 degC in all four states: context present, context absent, context malformed, context stale. Identical output across those states is the operative proof that no satellite value enters the prediction."
+  },
+  "local_dashboard": {
+    "url": "http://127.0.0.1:8766",
+    "endpoints_verified": [
+      "/healthz",
+      "/api/status",
+      "/api/context",
+      "/"
+    ],
+    "mode": "persistence + satellite context (not fused)",
+    "screenshot": "dashboard-8766.png"
+  },
+  "degradation_verified": [
+    {
+      "case": "context absent",
+      "mode": "persistence only",
+      "degraded_reason": "satellite context file is absent",
+      "forecast_degc": 32.675
+    },
+    {
+      "case": "context malformed",
+      "mode": "persistence only",
+      "degraded_reason": "satellite context is unreadable: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+      "forecast_degc": 32.675
+    },
+    {
+      "case": "frame stale (limit 10 min)",
+      "mode": "persistence only",
+      "degraded_reason": "frame is stale: 45.0 min old exceeds the 10 min freshness limit",
+      "forecast_degc": 32.675
+    }
+  ],
+  "board": {
+    "verified": true,
+    "hostname": "qualcomm",
+    "machine": "aarch64",
+    "python": "3.13.5",
+    "numpy_present": false,
+    "satpy_installed": false,
+    "deploy_dir": "/home/arduino/halo-satellite-context-20260816T021117Z",
+    "port": 8766,
+    "ports_left_untouched": {
+      "8080": "live 59-model service (pid 1513)",
+      "8765": "P0 emergency runtime, not running"
+    },
+    "verified_over": [
+      "adb shell",
+      "Wi-Fi http://<board-lan-ip>:8766"
+    ],
+    "apparent_temperature_parity": "The board has no NumPy, so it runs the stdlib mirror. It produced 32.675 degC, identical to the laptop's NumPy-backed target.apparent_temperature_c.",
+    "latency": {
+      "persistence_forecast": {
+        "calls": 200,
+        "median_ms": 0.0342,
+        "p95_ms": 0.0365,
+        "max_ms": 0.0628,
+        "min_ms": 0.0338
+      },
+      "full_status_assembly": {
+        "calls": 200,
+        "median_ms": 0.0613,
+        "p95_ms": 0.0632,
+        "max_ms": 0.0983,
+        "min_ms": 0.0606
+      }
+    },
+    "screenshot": "board-dashboard-8766.png"
+  },
+  "forbidden_claims_not_made": [
+    "no fused model",
+    "no AI predicting from satellite",
+    "no Himawari lead-time claim",
+    "no satellite improvement to the forecast",
+    "no 220 K threshold",
+    "no deep_pct",
+    "no cloud/storm/rain classification",
+    "no WBGT / medical / legal limit",
+    "no NPU / QNN / Hexagon / GPU",
+    "no production-ready or live SLA"
+  ],
+  "remaining_blockers": [
+    "The satellite arm remains unvalidated for prediction: no fused model exists, and the P1 gate in docs/superpowers/specs/2026-08-15-halo-safeshift-technical-design.md section 10 has not been attempted.",
+    "Only one historical frame was extracted, so delta30/delta60/trend90 are absent by design rather than computed.",
+    "Publication lag is an assumption (20 min core, 0/10/20/30 sensitivity), not a measurement of this object's real availability.",
+    "The 25 km ROI holds 339 pixels because AHI's 2 km sampling applies at the sub-satellite point, not over Vietnam; no per-pixel footprint was computed.",
+    "Two pre-existing XGBoost test failures remain unfixed (out of scope)."
+  ]
+}

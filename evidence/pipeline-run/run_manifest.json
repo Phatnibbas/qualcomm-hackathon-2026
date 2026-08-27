@@ -1,0 +1,159 @@
+{
+  "artifact": "run_manifest.json",
+  "run_id": "20260815T190622Z-99afc2c",
+  "config_id": "experiment.v1",
+  "phase": "local preparation only",
+  "started_utc": "2026-08-15T19:06:27.992219Z",
+  "finished_utc": "2026-08-15T19:06:50.210154Z",
+  "git_head_short": "99afc2c",
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "sklearn": "1.6.1",
+    "sklearn_status": "imported and version read",
+    "pyarrow": "23.0.1",
+    "pyarrow_status": "imported and version read",
+    "xgboost": null,
+    "xgboost_status": "not importable in this environment"
+  },
+  "optional_dependencies": {
+    "ridge": "available",
+    "elastic_net": "available",
+    "gradient_boosting": "available",
+    "extra_trees": "available",
+    "xgboost_optional": "absent",
+    "mlp_relu": "available"
+  },
+  "trial_budget": {
+    "policy": "curated explicit trial list; NO runtime Cartesian expansion",
+    "why_not_a_grid": "A Cartesian product over per-family value lists silently multiplies: the previous configuration expanded to well over a hundred fits and its size was invisible in the file. An explicit list makes the budget reviewable, keeps every trial's direct/residual provenance attached to the trial itself, and makes 'no hidden additional trials' a testable property.",
+    "ordering": "deterministic: exactly the order of the `trials` array below",
+    "adjustment_rule": "The trial list is frozen before any metric is computed. It must not be extended, pruned or reordered after validation outcomes are seen.",
+    "min_total_trials": 24,
+    "max_total_trials": 36,
+    "declared_total": 30,
+    "declared_excluding_xgboost": 26,
+    "declared_xgboost": 4,
+    "enable_xgboost": false,
+    "selected_total": 26,
+    "selected_trial_ids": [
+      "ridge-a0p1-direct",
+      "ridge-a1-direct",
+      "ridge-a10-direct",
+      "ridge-a1-residual",
+      "enet-a0p01-l0p5-direct",
+      "enet-a0p1-l0p5-direct",
+      "enet-a0p01-l0p9-direct",
+      "enet-a0p01-l0p5-residual",
+      "gb-n200-d3-lr0p05-direct",
+      "gb-n200-d2-lr0p05-direct",
+      "gb-n200-d3-lr0p1-direct",
+      "gb-n400-d3-lr0p05-direct",
+      "gb-n200-d3-lr0p05-residual",
+      "gb-n400-d3-lr0p05-residual",
+      "et-n300-dnone-leaf1-direct",
+      "et-n300-d8-leaf1-direct",
+      "et-n300-d16-leaf4-direct",
+      "et-n300-dnone-leaf4-direct",
+      "et-n300-dnone-leaf1-residual",
+      "et-n300-d16-leaf4-residual",
+      "mlp-h64-a0p001-direct",
+      "mlp-h64x32-a0p001-direct",
+      "mlp-h128x64-a0p001-direct",
+      "mlp-h64x32-a0p01-direct",
+      "mlp-h64x32-a0p001-residual",
+      "mlp-h128x64-a0p001-residual"
+    ],
+    "excluded_trial_ids": [
+      "xgb-n400-d4-lr0p05-direct",
+      "xgb-n400-d3-lr0p05-direct",
+      "xgb-n800-d4-lr0p05-direct",
+      "xgb-n400-d4-lr0p05-residual"
+    ],
+    "per_family_selected": {
+      "ridge": 4,
+      "elastic_net": 4,
+      "gradient_boosting": 6,
+      "extra_trees": 6,
+      "xgboost_optional": 0,
+      "mlp_relu": 6
+    },
+    "no_hidden_trials": "The fitted set is exactly selected_trial_ids. Nothing expands it at runtime and nothing may be appended after a metric is seen."
+  },
+  "packet_verification": {
+    "artifact": "packet_verification",
+    "verified": true,
+    "packet_dir": "evidence/halo-safeshift/20260815T190622Z-99afc2c/colab-input",
+    "run_id": "20260815T190622Z-99afc2c",
+    "config_id": "experiment.v1",
+    "n_declared_files": 10,
+    "n_source_archive_members": 29,
+    "checks": [
+      "packet manifest present and readable",
+      "10 declared packet files hash-verified",
+      "no undeclared file in the packet",
+      "packet config identity verified",
+      "raw CSV and channel metadata verified against the data manifest",
+      "puller path and hash agree across the source and data manifests",
+      "channel id matches the configured station",
+      "source archive verified: 29 members hashed from inside the archive",
+      "packet config matches the config inside the source archive",
+      "run identity consistent across 5 artifacts: 20260815T190622Z-99afc2c"
+    ],
+    "boundary": [
+      "Integrity verification only. It proves the packet is the packet that was prepared.",
+      "It says nothing about data quality, model quality or any performance claim."
+    ]
+  },
+  "colab_command_linux": {
+    "note": "Colab is Linux; these commands use `python`, not the local `py -3`.",
+    "steps": [
+      "python colab-input/bootstrap.py --packet colab-input --root .",
+      "python -m prototype.halo_safeshift.verify_packet --packet colab-input",
+      "python -m prototype.halo_safeshift.colab_train --packet colab-input --out artifacts/halo-safeshift/<run-id>"
+    ]
+  },
+  "inputs": {
+    "station_raw_csv": "benchmarks/halo/_cache/20260815T190622Z-99afc2c/station_raw.csv",
+    "station_raw_csv_sha256": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "channel_metadata": "evidence/halo-safeshift/20260815T190622Z-99afc2c/channel_metadata.json",
+    "channel_metadata_sha256": "25f2fc658667960c13153809ad23a4b503f82718721d12ae3d76189b57066b1b",
+    "data_manifest": "evidence/halo-safeshift/20260815T190622Z-99afc2c/data_manifest.json",
+    "data_manifest_sha256": "2c8e97ebdfdf7c25b6a748c61067b21713d158f4aec7c29c6b53e3024c524479"
+  },
+  "outputs": {
+    "resampled": {
+      "path": "evidence/halo-safeshift/20260815T190622Z-99afc2c/resampled_5min.parquet",
+      "format": "parquet",
+      "sha256": "921d313d40c4a83c82547f5f4076d2b2ae1a05548d24baf4c9ede6776be67b99"
+    },
+    "qc_report": "519024d748e3df3bf0561400a1353f23d8a6a8db2ad69925046fd0fbb3a69057",
+    "recovery_partition": "5f8c1857f5c0eb376d442b8509763427c234e1a33aef2659cf847e809f784fc9",
+    "fold_definitions": "bac7c07cb63afdc55b00b8457446ba89e62299ff2c03cc2353854879787d13de",
+    "window_diagnostics": "ec7a05437b8a9560c9a3a3a129b8fb1b669bfe7a8ffa36a5c6e526a6f2678af6",
+    "model_registry": "1511378c6ff08e4d98e920060cf310a7bccfd7b06be12b35cd6900d41291df01",
+    "local_smoke_report": "bc9300802d6d82639a8ec6775e530c308c5930ca6d8ebe6dc499da3966c5253f",
+    "packet_verification": "2cab8f27564e68cf9c258360baf494180f615f2d2224842bffaef0fc9ce5d30f",
+    "colab_packet_manifest": "fabe6321a7d335dd75ab3bbbada9e1c5b9799003c1d63609c6b145868e829b4a",
+    "source_archive_sha256": "7c4ad03e73a4a1112dd3facb736834f79a15f91a9743b5d1c2ce314a9b27bf45"
+  },
+  "counts": {
+    "raw_rows": 96659,
+    "admitted_rows": 74416,
+    "bins_total": 6812,
+    "bins_valid": 6801,
+    "historical_development_bins": 6800,
+    "prospective_quarantine_bins": 12,
+    "eligible_windows_historical": 6633,
+    "folds": 5
+  },
+  "claim_boundary": [
+    "Local preparation only.",
+    "Final model selection not performed.",
+    "Colab training not performed.",
+    "UNO Q inference not performed.",
+    "No performance claim is admitted."
+  ]
+}

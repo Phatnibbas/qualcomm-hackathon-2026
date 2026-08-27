@@ -1,0 +1,25 @@
+{
+  "artifact": "packet_verification",
+  "verified": true,
+  "packet_dir": "evidence/halo-safeshift/20260815T190622Z-99afc2c/colab-input",
+  "run_id": "20260815T190622Z-99afc2c",
+  "config_id": "experiment.v1",
+  "n_declared_files": 10,
+  "n_source_archive_members": 29,
+  "checks": [
+    "packet manifest present and readable",
+    "10 declared packet files hash-verified",
+    "no undeclared file in the packet",
+    "packet config identity verified",
+    "raw CSV and channel metadata verified against the data manifest",
+    "puller path and hash agree across the source and data manifests",
+    "channel id matches the configured station",
+    "source archive verified: 29 members hashed from inside the archive",
+    "packet config matches the config inside the source archive",
+    "run identity consistent across 5 artifacts: 20260815T190622Z-99afc2c"
+  ],
+  "boundary": [
+    "Integrity verification only. It proves the packet is the packet that was prepared.",
+    "It says nothing about data quality, model quality or any performance claim."
+  ]
+}

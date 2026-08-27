@@ -1,0 +1,18 @@
+{
+  "issue_time_utc": "2026-08-09T07:45:00+00:00",
+  "bin_seconds": 300,
+  "raw_rows_in_bin": 11,
+  "first_raw_utc": "2026-08-09T07:40:05+00:00",
+  "last_raw_utc": "2026-08-09T07:44:40+00:00",
+  "temperature_degc": 28.2,
+  "humidity_percent": 86.3,
+  "wind_mps": 3.4,
+  "current_at_degc": 32.6755,
+  "aggregation": "median of raw rows in the right-labelled closed 5-minute bin",
+  "source": {
+    "path": "VFCD_3rd_landscape_20260816-0336_74700rows.csv",
+    "name": "VFCD_3rd_landscape_20260816-0336_74700rows.csv",
+    "sha256": "c79ddcbf039d85211ef24c99c17c6e4fd506422345b6e0016a8f2a44dbe82106",
+    "bytes": 7075530
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "cohort": {
+    "fit": 5248,
+    "test": 1308,
+    "features": 125,
+    "horizon_min": 30
+  },
+  "persistence_test_mae": 0.805522351808402,
+  "families": [
+    {
+      "family": "ridge",
+      "kind": "linear",
+      "fit_seconds": 0.01,
+      "test_mae_fp32": 0.9732948048048173,
+      "test_rmse_fp32": 1.2494609990955488,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": 0.9881443360197028,
+      "params": 125,
+      "json_bytes": 7715
+    },
+    {
+      "family": "elasticnet",
+      "kind": "linear",
+      "fit_seconds": 0.42,
+      "test_mae_fp32": 0.9203506637333841,
+      "test_rmse_fp32": 1.1978331075588633,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": 0.9204843330474226,
+      "params": 56,
+      "json_bytes": 7684
+    },
+    {
+      "family": "lasso",
+      "kind": "linear",
+      "fit_seconds": 1.87,
+      "test_mae_fp32": 0.9271746214174287,
+      "test_rmse_fp32": 1.2012019862115488,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": 0.944266063658044,
+      "params": 77,
+      "json_bytes": 7685
+    },
+    {
+      "family": "huber",
+      "kind": "linear",
+      "fit_seconds": 2.9,
+      "test_mae_fp32": 0.8352242693889013,
+      "test_rmse_fp32": 1.1095422484765776,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": 0.8410414774535556,
+      "params": 125,
+      "json_bytes": 7713
+    },
+    {
+      "family": "mlp_64_32",
+      "kind": "mlp",
+      "fit_seconds": 3.88,
+      "test_mae_fp32": 2.6035227859792065,
+      "test_rmse_fp32": 3.6335513882735975,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": 2.620832065543081,
+      "params": 9999,
+      "json_bytes": 76810
+    },
+    {
+      "family": "extra_trees_60",
+      "kind": "tree",
+      "fit_seconds": 1.31,
+      "test_mae_fp32": 0.8361826982081197,
+      "test_rmse_fp32": 1.1447787646789551,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": null,
+      "int8_note": "tree thresholds are data values, not weights; per-tensor INT8 is not applicable",
+      "params": 30474,
+      "trees": 60,
+      "json_bytes": 1280685
+    },
+    {
+      "family": "random_forest_60",
+      "kind": "tree",
+      "fit_seconds": 6.26,
+      "test_mae_fp32": 0.7776573887157587,
+      "test_rmse_fp32": 1.0809289183644062,
+      "beats_persistence_fp32": true,
+      "test_mae_int8": null,
+      "int8_note": "tree thresholds are data values, not weights; per-tensor INT8 is not applicable",
+      "params": 19774,
+      "trees": 60,
+      "json_bytes": 830236
+    },
+    {
+      "family": "grad_boost_100",
+      "kind": "tree",
+      "fit_seconds": 22.48,
+      "test_mae_fp32": 0.809315956675164,
+      "test_rmse_fp32": 1.1267134659813294,
+      "beats_persistence_fp32": false,
+      "test_mae_int8": null,
+      "int8_note": "tree thresholds are data values, not weights; per-tensor INT8 is not applicable",
+      "params": 1490,
+      "trees": 100,
+      "json_bytes": 68278
+    }
+  ],
+  "quantization": "symmetric per-tensor INT8 on weights only; tree thresholds are data values and are not quantized",
+  "claim_boundary": "retrospective chronological holdout; not prospective certification"
+}

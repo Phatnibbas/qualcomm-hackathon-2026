@@ -1,0 +1,30 @@
+{
+  "board-dashboard-8766.png": {
+    "sha256": "36e2db1efd0c51179bcdd1362d9dfb125381ecae79eb76fb397a7454a7a5b7c0",
+    "bytes": 139280
+  },
+  "commands.txt": {
+    "sha256": "c3398a35db45050a0d0bc8b5a0849e7ed5c37fe7cbbfde9ddeeaf9797f7b0611",
+    "bytes": 3437
+  },
+  "dashboard-8766.png": {
+    "sha256": "7e56bd4d4157ef765746378b7f65667f698751db59ba2cfef9cbe3c130355fe6",
+    "bytes": 182686
+  },
+  "environment.json": {
+    "sha256": "336ae58ae3e4c06c51b29f3a262b1393d8bd13c057128d3cb7422be4a604084b",
+    "bytes": 1052
+  },
+  "runtime_status.json": {
+    "sha256": "2759a1bad72d3b45b2aa7d1f4bc3144b32c842138b44b46d1f16706c819e7dda",
+    "bytes": 7172
+  },
+  "satellite_context.json": {
+    "sha256": "a021115b7ebb169bdabaa113c6d352456c6be79d5c9d5233bf6d76d3bc9ca4e9",
+    "bytes": 6176
+  },
+  "station_input_manifest.json": {
+    "sha256": "6978fff9ac39e3b3408bea1d8b422ece0e2687e2fb350dfbf47597df9f4646ea",
+    "bytes": 644
+  }
+}

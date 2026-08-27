@@ -1,0 +1,100 @@
+{
+  "artifact": "board-runtime-optimized.json",
+  "measured_local": "2026-08-16T06:58 ICT",
+  "device_scope": "Arduino UNO Q over ADB; device serial intentionally omitted",
+  "remote_dir": "/home/arduino/halo-safeshift-emergency",
+  "board": {
+    "runtime": "Arduino UNO Q",
+    "hostname": "qualcomm",
+    "kernel": "7.0.0-g122c2c22d838",
+    "arch": "aarch64",
+    "cores": 4,
+    "python": "3.13.5",
+    "numpy_present": false
+  },
+  "why_pure_python": "numpy is not installed on the board (ModuleNotFoundError), so the optimized runner uses only the standard library.",
+  "model_run_id": "20260815T205628Z-colab",
+  "remote_sha256": {
+    "edge_runner.py": "e3538f231ea0d381bcf6cc12cdbe6cc3f608b34f2b03d9e3f39b07c4890a3251",
+    "edge_runner_fast.py": "fcd655a491d702e1f12efa560c334ec6c22e6f70b8f1edaf34124710a511d342",
+    "edge_model.json": "d46df87da2d252f8988f5756cbff69cac84908f34338351ac4c39cdaf38e66a0",
+    "challenger_edge_model.json": "5c38132ce3f8c94d02c0cc2d69115d5c5a4307155040a63649f7c5f3d996f1be",
+    "replay_samples.json": "28cb7a3b71a1415c7265fca3f76c9f2ade61b7033f5428b6aefb8d176ab95ae0"
+  },
+  "protocol": {
+    "samples": 64,
+    "repeat": 500,
+    "runs": 2,
+    "note": "Two independent runs; medians agree within 1.5%. Values below are run 1, with run 2 in parentheses."
+  },
+  "measurements_ms": [
+    {
+      "runner": "edge_runner.py (baseline)",
+      "model": "edge_model.json",
+      "model_type": "persistence",
+      "median": 0.043281,
+      "median_run2": 0.043229,
+      "p95": 0.045313,
+      "max": 0.093593
+    },
+    {
+      "runner": "edge_runner.py (baseline)",
+      "model": "challenger_edge_model.json",
+      "model_type": "mlp_sparse_int8",
+      "median": 2.4355555,
+      "median_run2": 2.431858,
+      "p95": 2.458368,
+      "max": 2.577065
+    },
+    {
+      "runner": "edge_runner_fast.py (optimized)",
+      "model": "edge_model.json",
+      "model_type": "persistence",
+      "median": 0.001302,
+      "median_run2": 0.001302,
+      "p95": 0.001406,
+      "max": 0.006042
+    },
+    {
+      "runner": "edge_runner_fast.py (optimized)",
+      "model": "challenger_edge_model.json",
+      "model_type": "mlp_sparse_int8",
+      "median": 1.07757,
+      "median_run2": 1.0926225,
+      "p95": 1.101607,
+      "max": 1.139055
+    }
+  ],
+  "speedup_median": {
+    "persistence": 33.24,
+    "mlp_sparse_int8": 2.26
+  },
+  "throughput_per_sec_on_board": {
+    "mlp_sparse_int8_baseline": 411,
+    "mlp_sparse_int8_optimized": 928
+  },
+  "model_shape": {
+    "topology": "125 -> 64 -> 32 -> 1",
+    "nonzero_weights": 3025,
+    "dense_weight_count": 10080,
+    "sparsity_fraction": 0.6998,
+    "quantization": "INT8 weights with a per-layer float scale"
+  },
+  "numerical_agreement": {
+    "persistence": "0.0 (bit-identical to baseline)",
+    "mlp_sparse_int8": "~1.5e-14 on board, 2.13e-14 on x86; float re-association from folding the INT8 scale and the normalisation, NOT a different model",
+    "warning": "This is not zero and must not be reported as zero."
+  },
+  "optimizations_applied": [
+    "int()/float() casts hoisted out of the hot loop (3,025 casts per call removed)",
+    "(v - mean) / scale folded to v * a + b: division becomes multiplication, two ops become one",
+    "per-layer INT8 weight_scale folded into the weights, removing one multiply per neuron",
+    "Python MAC loop replaced by sum(map(mul, weights, itemgetter(*idx)(h))), which runs gather+multiply+accumulate in C"
+  ],
+  "claim_boundary": [
+    "CPU Python only. No NPU, QNN, Hexagon or GPU acceleration is used or claimed.",
+    "Latency is for this UNO Q, this Python build, this replay set only.",
+    "Model quality is unchanged by this work: the sparse-INT8 MLP still loses to persistence on the held-out test (0.924 vs 0.806 degC MAE), which is why persistence remains the operational model.",
+    "The MLP runs on the board as a labelled challenger, not as the shipped model."
+  ]
+}

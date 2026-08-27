@@ -1,0 +1,96 @@
+##### runner=edge_runner.py model=edge_model.json
+{
+  "runtime": "Arduino UNO Q",
+  "hostname": "qualcomm",
+  "kernel": "7.0.0-g122c2c22d838",
+  "python": "3.13.5",
+  "model_type": "persistence",
+  "model_run_id": "20260815T205628Z-colab",
+  "samples": 64,
+  "repeat": 500,
+  "latency_ms": {
+    "median": 0.043229,
+    "p95": 0.045416,
+    "max": 0.076718
+  },
+  "first_predictions": [
+    33.9842643737793,
+    33.952476501464844,
+    34.197914123535156,
+    34.171104431152344,
+    34.08696365356445
+  ]
+}
+##### runner=edge_runner.py model=challenger_edge_model.json
+{
+  "runtime": "Arduino UNO Q",
+  "hostname": "qualcomm",
+  "kernel": "7.0.0-g122c2c22d838",
+  "python": "3.13.5",
+  "model_type": "mlp_sparse_int8",
+  "model_run_id": "20260815T205628Z-colab",
+  "samples": 64,
+  "repeat": 500,
+  "latency_ms": {
+    "median": 2.431858,
+    "p95": 2.452535,
+    "max": 2.596597
+  },
+  "first_predictions": [
+    34.542559181987045,
+    34.55956970483655,
+    34.605159007801454,
+    34.57932787928293,
+    34.579999715479296
+  ]
+}
+##### runner=edge_runner_fast.py model=edge_model.json
+{
+  "runtime": "Arduino UNO Q",
+  "hostname": "qualcomm",
+  "kernel": "7.0.0-g122c2c22d838",
+  "python": "3.13.5",
+  "runner": "edge_runner_fast.py (compiled sparse-INT8, CPU Python only)",
+  "model_type": "persistence",
+  "model_run_id": "20260815T205628Z-colab",
+  "samples": 64,
+  "repeat": 500,
+  "latency_ms": {
+    "median": 0.001302,
+    "p95": 0.001406,
+    "max": 0.006927
+  },
+  "first_predictions": [
+    33.9842643737793,
+    33.952476501464844,
+    34.197914123535156,
+    34.171104431152344,
+    34.08696365356445
+  ],
+  "acceleration_claim": "none; CPU Python only. No NPU/QNN/Hexagon/GPU."
+}
+##### runner=edge_runner_fast.py model=challenger_edge_model.json
+{
+  "runtime": "Arduino UNO Q",
+  "hostname": "qualcomm",
+  "kernel": "7.0.0-g122c2c22d838",
+  "python": "3.13.5",
+  "runner": "edge_runner_fast.py (compiled sparse-INT8, CPU Python only)",
+  "model_type": "mlp_sparse_int8",
+  "model_run_id": "20260815T205628Z-colab",
+  "samples": 64,
+  "repeat": 500,
+  "latency_ms": {
+    "median": 1.0926225,
+    "p95": 1.116554,
+    "max": 1.172336
+  },
+  "first_predictions": [
+    34.54255918198703,
+    34.559569704836534,
+    34.60515900780143,
+    34.579327879282914,
+    34.579999715479296
+  ],
+  "acceleration_claim": "none; CPU Python only. No NPU/QNN/Hexagon/GPU."
+}

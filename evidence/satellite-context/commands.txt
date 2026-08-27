@@ -1,0 +1,64 @@
+# HALO SafeShift — zero-training satellite context
+# All commands run from the repository root on 2026-08-16 (UTC stamps in artifacts).
+# NOTHING was committed or pushed.
+
+## 0. Isolated decode environment (no project/global dependency added)
+py -3 -m venv <scratchpad>/satvenv
+<scratchpad>/satvenv/Scripts/python.exe -m pip install "satpy[ahi_hsd]" pyproj
+# -> satpy 0.60.0, pyproj 3.7.2, numpy 2.5.2, xarray 2026.7.0, dask 2026.7.1
+
+## 1. Unit tests (no network; download boundary mocked at download_object)
+py -3 -m unittest prototype.halo_safeshift.tests.test_satellite_context
+# -> Ran 29 tests, OK
+
+## 2. Required regression suite
+py -3 -m unittest \
+  prototype.halo_safeshift.tests.test_full_pipeline_contracts \
+  prototype.halo_safeshift.tests.test_full_runtime \
+  prototype.halo_safeshift.tests.test_full_notebook \
+  prototype.halo_safeshift.tests.test_full_bundle
+# -> Ran 21 tests, OK
+
+## 3. Whole package suite
+py -3 -m unittest discover -s prototype/halo_safeshift/tests -t .
+# -> Ran 288 tests, 2 failures (both PRE-EXISTING XGBoost defects, see runtime_status.json)
+
+## 4. Real NOAA download + Satpy reference decode
+<scratchpad>/satvenv/Scripts/python.exe -m prototype.halo_safeshift.satellite_context historical \
+  --nominal-scan-utc 2026-08-09T07:00:00Z \
+  --issue-time-utc   2026-08-09T07:45:00Z \
+  --output "evidence/halo-safeshift/satellite-context-20260816T021117Z/satellite_context.json" \
+  --cache  "<scratchpad>/himawari-cache"
+# -> ok, 54.305 s, bands B13+B08, frame_age_minutes 35.0
+# -> raw .bz2 objects stay in <scratchpad>/himawari-cache and are NOT in git or evidence
+
+## 5. Station input from the real frozen station CSV
+py -3 -c "from prototype.halo_safeshift.satellite_context_dashboard import build_station_input_from_csv; ..."
+# -> 11 raw rows in the closed 5-minute bin ending 2026-08-09T07:45:00Z
+
+## 6. Local dashboard on port 8766 (8765 and 8080 untouched)
+py -3 -m prototype.halo_safeshift.satellite_context_dashboard \
+  --satellite-context "<evidence>/satellite_context.json" \
+  --station-input     "<evidence>/station_input_manifest.json" \
+  --host 127.0.0.1 --port 8766
+curl http://127.0.0.1:8766/healthz
+curl http://127.0.0.1:8766/api/status
+curl http://127.0.0.1:8766/api/context
+
+## 7. Degradation checks (each still serves the persistence forecast)
+--station-input <...>                                   # absent  -> "satellite context file is absent"
+--satellite-context <bad.json>                          # broken  -> "satellite context is unreadable: ..."
+--satellite-context <good.json> --max-frame-age-minutes 10   # stale -> "frame is stale: 45.0 min old exceeds the 10 min freshness limit"
+
+## 8. UNO Q deploy (read-only preflight first; Satpy NOT installed on the board)
+adb shell "mkdir -p /home/arduino/halo-satellite-context-20260816T021117Z"
+adb push prototype/halo_safeshift/satellite_context_dashboard.py <dir>/
+adb push <evidence>/satellite_context.json <dir>/
+adb push <evidence>/station_input_manifest.json <dir>/
+adb shell "sh <dir>/start_satctx.sh"          # setsid; survives the adb session
+adb shell "cd <dir> && python3 bench_satctx.py"   # 200 calls
+curl http://<board-lan-ip>:8766/api/status      # over Wi-Fi, not ADB
+
+## 9. Board UI change requested mid-run (separate from the satellite work)
+adb push "edge/halo_live.py" /home/arduino/halo-safeshift-emergency/halo_live.py
+adb shell "sh /home/arduino/halo-safeshift-emergency/start_live.sh"

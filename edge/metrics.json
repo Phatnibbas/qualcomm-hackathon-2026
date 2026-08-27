@@ -1,0 +1,145 @@
+{
+  "run_id": "20260815T205628Z-colab",
+  "target": "station-derived shade apparent-temperature estimate at t+30 minutes",
+  "evaluation_status": "retrospective chronological holdout; not prospective certification",
+  "environment": {
+    "run_id": "20260815T205628Z-colab",
+    "created_utc": "2026-08-15T20:56:52.836007Z",
+    "csv_name": "VFCD_3rd_landscape_20260816-0336_74700rows.csv",
+    "csv_sha256": "c79ddcbf039d85211ef24c99c17c6e4fd506422345b6e0016a8f2a44dbe82106",
+    "csv_bytes": 7075530,
+    "python": "3.12.13",
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.35",
+    "numpy": "2.0.2",
+    "pandas": "2.2.2",
+    "tensorflow": "2.20.0",
+    "gpu_visible": [
+      "/physical_device:GPU:0"
+    ],
+    "training_device": "GPU when TensorFlow places supported ops there; otherwise CPU",
+    "edge_acceleration_claim": "none; UNO Q runtime is measured separately"
+  },
+  "qc": {
+    "raw_rows": 74700,
+    "timestamp_valid_unique_rows": 74700,
+    "rows_rejected_physical_or_missing": 116,
+    "valid_5min_bins": 6815,
+    "first_valid_bin_utc": "2026-07-21T17:25:00+00:00",
+    "last_valid_bin_utc": "2026-08-15T20:35:00+00:00",
+    "eligible_windows": 6628,
+    "n_features": 125
+  },
+  "split": {
+    "policy": "chronological 60/20/20 with 90-minute embargo",
+    "train": {
+      "n": 3958,
+      "first": "2026-07-21T18:20:00+00:00",
+      "last": "2026-08-05T04:35:00+00:00"
+    },
+    "validation": {
+      "n": 1290,
+      "first": "2026-08-05T07:40:00+00:00",
+      "last": "2026-08-09T22:05:00+00:00"
+    },
+    "test": {
+      "n": 1308,
+      "first": "2026-08-10T01:10:00+00:00",
+      "last": "2026-08-15T20:05:00+00:00"
+    }
+  },
+  "base_model": {
+    "validation": {
+      "mlp_mae_degc": 0.813428521156311,
+      "persistence_mae_degc": 0.8351761102676392
+    },
+    "test": {
+      "mlp_mae_degc": 0.923964262008667,
+      "mlp_rmse_degc": 1.2547358274459839,
+      "persistence_mae_degc": 0.8055223226547241,
+      "persistence_rmse_degc": 1.124814748764038,
+      "absolute_mae_gain_degc": -0.11844193935394287,
+      "relative_mae_gain_fraction": -0.14703743896705312,
+      "learned_model_gate": false
+    },
+    "training_seconds": 6.029812087000209,
+    "epochs_ran": 20
+  },
+  "optimization": {
+    "pruning_candidates": [
+      {
+        "requested_sparsity": 0.0,
+        "actual_sparsity": 0.0,
+        "validation_mae_degc": 0.8134250044822693,
+        "test_mae_degc": 0.9239848852157593,
+        "eligible_by_validation": true
+      },
+      {
+        "requested_sparsity": 0.3,
+        "actual_sparsity": 0.29990079365079364,
+        "validation_mae_degc": 0.8651512265205383,
+        "test_mae_degc": 0.852050244808197,
+        "eligible_by_validation": false
+      },
+      {
+        "requested_sparsity": 0.5,
+        "actual_sparsity": 0.5,
+        "validation_mae_degc": 0.8503706455230713,
+        "test_mae_degc": 0.854141354560852,
+        "eligible_by_validation": false
+      },
+      {
+        "requested_sparsity": 0.7,
+        "actual_sparsity": 0.6999007936507936,
+        "validation_mae_degc": 0.8347366452217102,
+        "test_mae_degc": 0.8370167016983032,
+        "eligible_by_validation": true
+      }
+    ],
+    "selected_pruning_by_validation": {
+      "requested_sparsity": 0.7,
+      "actual_sparsity": 0.6999007936507936,
+      "validation_mae_degc": 0.8347366452217102,
+      "test_mae_degc": 0.8370167016983032,
+      "eligible_by_validation": true
+    },
+    "int8_weight_storage": {
+      "validation_mae_degc": 0.8348398208618164,
+      "test_mae_degc": 0.8384653329849243,
+      "eligible": true,
+      "layers": [
+        {
+          "layer": 0,
+          "scale": 0.002232472492953924,
+          "zero_weights": 5600,
+          "weights": 8000
+        },
+        {
+          "layer": 1,
+          "scale": 0.002369912825231477,
+          "zero_weights": 1433,
+          "weights": 2048
+        },
+        {
+          "layer": 2,
+          "scale": 0.0031300869983012284,
+          "zero_weights": 22,
+          "weights": 32
+        }
+      ]
+    },
+    "tflite_bytes": {
+      "fp32": 42672,
+      "dynamic": 13696,
+      "int8": 14968
+    },
+    "operational_model": "persistence",
+    "learned_gate_pass": false,
+    "boundary": "Pruning and quantization are retained by validation quality; speed is not claimed until measured on UNO Q."
+  },
+  "forbidden_claims": [
+    "WBGT",
+    "medical prediction",
+    "legal safety limit",
+    "UNO Q NPU/QNN/Hexagon acceleration"
+  ]
+}

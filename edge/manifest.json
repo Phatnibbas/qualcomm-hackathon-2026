@@ -1,0 +1,62 @@
+{
+  "run_id": "20260815T205628Z-colab",
+  "files": {
+    "challenger_edge_model.json": {
+      "bytes": 33340,
+      "sha256": "5c38132ce3f8c94d02c0cc2d69115d5c5a4307155040a63649f7c5f3d996f1be"
+    },
+    "edge_model.json": {
+      "bytes": 2859,
+      "sha256": "d46df87da2d252f8988f5756cbff69cac84908f34338351ac4c39cdaf38e66a0"
+    },
+    "edge_runner.py": {
+      "bytes": 2323,
+      "sha256": "e3538f231ea0d381bcf6cc12cdbe6cc3f608b34f2b03d9e3f39b07c4890a3251"
+    },
+    "feature_schema.json": {
+      "bytes": 3301,
+      "sha256": "01d22b73d952536017949dd49877f6b162cc44c7b989e9f577d6e96267d3886b"
+    },
+    "heldout_replay.png": {
+      "bytes": 237319,
+      "sha256": "a83cefdd836a043fa9f806a73db7a9f3dd88065b1999368a509e279631986ed0"
+    },
+    "metrics.json": {
+      "bytes": 4462,
+      "sha256": "9c958ba454e7be0bc2af31c6a4b737f7ed75646ab31a1931484ff6a4830c97ee"
+    },
+    "model_dynamic_int8.tflite": {
+      "bytes": 13696,
+      "sha256": "9bacdb01d559dd455eaf66d42d39d9ca1d4f23d2b0d5eb12ae071b8c87bddc59"
+    },
+    "model_fp32.tflite": {
+      "bytes": 42672,
+      "sha256": "59c3e4ccedf3af07dd17fa87271e74f80ac6690a21d7b37d1f8864d19456aa6f"
+    },
+    "model_full_int8.tflite": {
+      "bytes": 14968,
+      "sha256": "1febbc5c0efd81f124d33f344fe9b806705912c97c1395fa9d9fcb69a8626fd8"
+    },
+    "pruning_tradeoff.png": {
+      "bytes": 34294,
+      "sha256": "f9d49c655dfe3c9a05a07b5a7869913d68c86fbb95060eba79c9361ea8297989"
+    },
+    "qc_report.json": {
+      "bytes": 290,
+      "sha256": "f649aeed49e1d1013e343c4e6ca7c6203cb6255a2101928429b5ed4122c5d21b"
+    },
+    "replay_samples.json": {
+      "bytes": 141743,
+      "sha256": "28cb7a3b71a1415c7265fca3f76c9f2ade61b7033f5428b6aefb8d176ab95ae0"
+    },
+    "split.json": {
+      "bytes": 412,
+      "sha256": "cb992ba4184a671d43e18927674187d90e478b16b5aa2dcf602b8ab42f78bbf7"
+    },
+    "training_history.png": {
+      "bytes": 75268,
+      "sha256": "0497c779f9b14a15a20a0b3f199a8057c1faf49b8081a49ff45c438b470d6922"
+    }
+  },
+  "csv_sha256": "c79ddcbf039d85211ef24c99c17c6e4fd506422345b6e0016a8f2a44dbe82106"
+}

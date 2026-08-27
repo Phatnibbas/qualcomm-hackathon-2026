@@ -1,0 +1,21 @@
+{
+  "validation_mae": {
+    "ridge": 0.9075738978254008,
+    "elasticnet": 0.7983311206814325,
+    "lasso": 0.8421925554982506,
+    "huber": 0.8524633578035745,
+    "mlp_64_32": 0.968893202501211,
+    "extra_trees_60": 0.7501295746016124,
+    "random_forest_60": 0.7579199524749929,
+    "grad_boost_100": 0.761031441851893
+  },
+  "persistence_validation_mae": 0.8351760324006785,
+  "validation_winner": "extra_trees_60",
+  "winner_beats_persistence_on_validation": true,
+  "persistence_test_mae": 0.805522351808402,
+  "winner_test_mae": 0.83618269820812,
+  "test_gain_degc": -0.03066034639971793,
+  "test_gain_fraction": -0.03806268855344024,
+  "verdict": "NOT AN HONEST GAIN: do not quote a learned win",
+  "protocol": "fit on train, select on validation, refit on train+validation, read test once"
+}

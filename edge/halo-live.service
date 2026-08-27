@@ -1,0 +1,21 @@
+[Unit]
+Description=HALO SafeShift live inference on Arduino UNO Q
+Documentation=https://thingspeak.com/channels/3428136
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=arduino
+WorkingDirectory=/home/arduino/halo-safeshift-emergency
+ExecStart=/usr/bin/python3 /home/arduino/halo-safeshift-emergency/halo_live.py \
+  --model operational=edge_model.json \
+  --model challenger=challenger_edge_model.json \
+  --host 0.0.0.0 --port 8080 --refresh 60
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/arduino/halo-safeshift-emergency/halo_live.log
+StandardError=append:/home/arduino/halo-safeshift-emergency/halo_live.log
+
+[Install]
+WantedBy=multi-user.target

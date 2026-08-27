@@ -1,0 +1,86 @@
+{
+  "artifact": "qc_report.json",
+  "run_id": "20260815T190622Z-99afc2c",
+  "config_id": "experiment.v1",
+  "input": {
+    "csv_path": "benchmarks/halo/_cache/20260815T190622Z-99afc2c/station_raw.csv",
+    "csv_sha256": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "channel_metadata_sha256": "25f2fc658667960c13153809ad23a4b503f82718721d12ae3d76189b57066b1b"
+  },
+  "field_mapping": {
+    "field1": "wind_speed",
+    "field2": "wind_direction",
+    "field3": "temperature",
+    "field4": "pressure",
+    "field5": "light",
+    "field6": "humidity",
+    "field7": "noise",
+    "field8": "pm25"
+  },
+  "required_semantics": [
+    "temperature",
+    "humidity",
+    "wind_speed"
+  ],
+  "row_level": {
+    "rows_input": 96659,
+    "rejected_unparsable_timestamp": 0,
+    "rejected_before_wind_scale_fix_epoch": 22235,
+    "rejected_duplicate_entry_id": 0,
+    "rejected_required_non_numeric_or_non_finite": 5,
+    "rejected_temperature_le_threshold": 3,
+    "rejected_humidity_le_threshold": 0,
+    "rejected_humidity_gt_threshold": 0,
+    "rejected_wind_speed_lt_threshold": 0,
+    "nulled_optional_non_numeric_or_non_finite": 21,
+    "nulled_pressure_le_threshold": 112,
+    "nulled_wind_direction_out_of_range": 0,
+    "rows_admitted": 74416
+  },
+  "resampling": {
+    "bin_minutes": 5,
+    "label": "right",
+    "closed": "right",
+    "aggregation": "median",
+    "min_raw_observations_per_bin": 6,
+    "expected_raw_observations_per_bin": 11,
+    "interpolation_applied": false,
+    "wind_direction_aggregation_limitation": "The median of a circular variable is not wrap-around safe. The contract fixes median aggregation for every channel, so wind_direction is aggregated as a plain median of degrees and this limitation is declared rather than silently corrected. Downstream the direction is encoded as sin/cos.",
+    "apparent_temperature_aggregation": "Apparent temperature is computed per admitted raw row and then median-aggregated inside the bin, matching the technical design's wording 'the median apparent-temperature estimate in the bin'. This is not identical to evaluating the equation on the binned medians."
+  },
+  "bins": {
+    "total": 6812,
+    "valid": 6801,
+    "invalid": 11,
+    "first_bin_utc": "2026-07-21T15:45:00Z",
+    "last_bin_utc": "2026-08-15T17:10:00Z",
+    "invalid_reason_counts": {
+      "temperature_raw_count_3_lt_6": 4,
+      "humidity_raw_count_3_lt_6": 4,
+      "wind_speed_raw_count_3_lt_6": 4,
+      "temperature_raw_count_1_lt_6": 2,
+      "humidity_raw_count_1_lt_6": 2,
+      "wind_speed_raw_count_1_lt_6": 2,
+      "temperature_raw_count_2_lt_6": 1,
+      "humidity_raw_count_2_lt_6": 1,
+      "wind_speed_raw_count_2_lt_6": 1,
+      "temperature_raw_count_5_lt_6": 4,
+      "humidity_raw_count_5_lt_6": 4,
+      "wind_speed_raw_count_5_lt_6": 4
+    },
+    "per_channel_null_bins": {
+      "wind_speed": 0,
+      "wind_direction": 0,
+      "temperature": 0,
+      "pressure": 9,
+      "light": 0,
+      "humidity": 0,
+      "noise": 0,
+      "pm25": 0
+    }
+  },
+  "boundary": [
+    "These counts describe data preparation only.",
+    "No model was trained, selected or evaluated to produce this report."
+  ]
+}

@@ -1,0 +1,439 @@
+{
+  "artifact": "model_registry",
+  "baselines": [
+    "persistence",
+    "climatology_local_time"
+  ],
+  "learned_families": [
+    "ridge",
+    "elastic_net",
+    "gradient_boosting",
+    "extra_trees",
+    "xgboost_optional",
+    "mlp_relu"
+  ],
+  "forbidden_families_this_phase": [
+    "random_forest",
+    "lightgbm",
+    "catboost",
+    "lstm",
+    "gru",
+    "transformer"
+  ],
+  "family_to_export_type": {
+    "ridge": "linear",
+    "elastic_net": "linear",
+    "gradient_boosting": "tree_ensemble",
+    "extra_trees": "tree_ensemble",
+    "xgboost_optional": "tree_ensemble",
+    "mlp_relu": "mlp_relu"
+  },
+  "family_status": {
+    "ridge": {
+      "provider": "scikit-learn",
+      "local_status": "available",
+      "export_type": "linear",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    },
+    "elastic_net": {
+      "provider": "scikit-learn",
+      "local_status": "available",
+      "export_type": "linear",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    },
+    "gradient_boosting": {
+      "provider": "scikit-learn",
+      "local_status": "available",
+      "export_type": "tree_ensemble",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    },
+    "extra_trees": {
+      "provider": "scikit-learn",
+      "local_status": "available",
+      "export_type": "tree_ensemble",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    },
+    "xgboost_optional": {
+      "provider": "xgboost",
+      "local_status": "absent",
+      "export_type": "tree_ensemble",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    },
+    "mlp_relu": {
+      "provider": "scikit-learn",
+      "local_status": "available",
+      "export_type": "mlp_relu",
+      "trainable_here": false,
+      "trainable_here_reason": "Local phase performs preparation and parity checks only. Training and selection happen in the Colab phase."
+    }
+  },
+  "trial_source": "prototype/halo_safeshift/config/experiment.v1.json -> models.trials",
+  "trial_budget": {
+    "policy": "curated explicit trial list; NO runtime Cartesian expansion",
+    "why_not_a_grid": "A Cartesian product over per-family value lists silently multiplies: the previous configuration expanded to well over a hundred fits and its size was invisible in the file. An explicit list makes the budget reviewable, keeps every trial's direct/residual provenance attached to the trial itself, and makes 'no hidden additional trials' a testable property.",
+    "ordering": "deterministic: exactly the order of the `trials` array below",
+    "adjustment_rule": "The trial list is frozen before any metric is computed. It must not be extended, pruned or reordered after validation outcomes are seen.",
+    "min_total_trials": 24,
+    "max_total_trials": 36,
+    "declared_total": 30,
+    "declared_excluding_xgboost": 26,
+    "declared_xgboost": 4,
+    "enable_xgboost": false,
+    "selected_total": 26,
+    "selected_trial_ids": [
+      "ridge-a0p1-direct",
+      "ridge-a1-direct",
+      "ridge-a10-direct",
+      "ridge-a1-residual",
+      "enet-a0p01-l0p5-direct",
+      "enet-a0p1-l0p5-direct",
+      "enet-a0p01-l0p9-direct",
+      "enet-a0p01-l0p5-residual",
+      "gb-n200-d3-lr0p05-direct",
+      "gb-n200-d2-lr0p05-direct",
+      "gb-n200-d3-lr0p1-direct",
+      "gb-n400-d3-lr0p05-direct",
+      "gb-n200-d3-lr0p05-residual",
+      "gb-n400-d3-lr0p05-residual",
+      "et-n300-dnone-leaf1-direct",
+      "et-n300-d8-leaf1-direct",
+      "et-n300-d16-leaf4-direct",
+      "et-n300-dnone-leaf4-direct",
+      "et-n300-dnone-leaf1-residual",
+      "et-n300-d16-leaf4-residual",
+      "mlp-h64-a0p001-direct",
+      "mlp-h64x32-a0p001-direct",
+      "mlp-h128x64-a0p001-direct",
+      "mlp-h64x32-a0p01-direct",
+      "mlp-h64x32-a0p001-residual",
+      "mlp-h128x64-a0p001-residual"
+    ],
+    "excluded_trial_ids": [
+      "xgb-n400-d4-lr0p05-direct",
+      "xgb-n400-d3-lr0p05-direct",
+      "xgb-n800-d4-lr0p05-direct",
+      "xgb-n400-d4-lr0p05-residual"
+    ],
+    "per_family_selected": {
+      "ridge": 4,
+      "elastic_net": 4,
+      "gradient_boosting": 6,
+      "extra_trees": 6,
+      "xgboost_optional": 0,
+      "mlp_relu": 6
+    },
+    "no_hidden_trials": "The fitted set is exactly selected_trial_ids. Nothing expands it at runtime and nothing may be appended after a metric is seen."
+  },
+  "trials": [
+    {
+      "trial_id": "ridge-a0p1-direct",
+      "family": "ridge",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 0.1
+      }
+    },
+    {
+      "trial_id": "ridge-a1-direct",
+      "family": "ridge",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 1.0
+      }
+    },
+    {
+      "trial_id": "ridge-a10-direct",
+      "family": "ridge",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 10.0
+      }
+    },
+    {
+      "trial_id": "ridge-a1-residual",
+      "family": "ridge",
+      "parameterization": "residual",
+      "params": {
+        "alpha": 1.0
+      }
+    },
+    {
+      "trial_id": "enet-a0p01-l0p5-direct",
+      "family": "elastic_net",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 0.01,
+        "l1_ratio": 0.5
+      }
+    },
+    {
+      "trial_id": "enet-a0p1-l0p5-direct",
+      "family": "elastic_net",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 0.1,
+        "l1_ratio": 0.5
+      }
+    },
+    {
+      "trial_id": "enet-a0p01-l0p9-direct",
+      "family": "elastic_net",
+      "parameterization": "direct",
+      "params": {
+        "alpha": 0.01,
+        "l1_ratio": 0.9
+      }
+    },
+    {
+      "trial_id": "enet-a0p01-l0p5-residual",
+      "family": "elastic_net",
+      "parameterization": "residual",
+      "params": {
+        "alpha": 0.01,
+        "l1_ratio": 0.5
+      }
+    },
+    {
+      "trial_id": "gb-n200-d3-lr0p05-direct",
+      "family": "gradient_boosting",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "gb-n200-d2-lr0p05-direct",
+      "family": "gradient_boosting",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 2,
+        "learning_rate": 0.05,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "gb-n200-d3-lr0p1-direct",
+      "family": "gradient_boosting",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "gb-n400-d3-lr0p05-direct",
+      "family": "gradient_boosting",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 400,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "gb-n200-d3-lr0p05-residual",
+      "family": "gradient_boosting",
+      "parameterization": "residual",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "gb-n400-d3-lr0p05-residual",
+      "family": "gradient_boosting",
+      "parameterization": "residual",
+      "params": {
+        "n_estimators": 400,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 1.0
+      }
+    },
+    {
+      "trial_id": "et-n300-dnone-leaf1-direct",
+      "family": "extra_trees",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 1
+      }
+    },
+    {
+      "trial_id": "et-n300-d8-leaf1-direct",
+      "family": "extra_trees",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 8,
+        "min_samples_leaf": 1
+      }
+    },
+    {
+      "trial_id": "et-n300-d16-leaf4-direct",
+      "family": "extra_trees",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 16,
+        "min_samples_leaf": 4
+      }
+    },
+    {
+      "trial_id": "et-n300-dnone-leaf4-direct",
+      "family": "extra_trees",
+      "parameterization": "direct",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 4
+      }
+    },
+    {
+      "trial_id": "et-n300-dnone-leaf1-residual",
+      "family": "extra_trees",
+      "parameterization": "residual",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 1
+      }
+    },
+    {
+      "trial_id": "et-n300-d16-leaf4-residual",
+      "family": "extra_trees",
+      "parameterization": "residual",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 16,
+        "min_samples_leaf": 4
+      }
+    },
+    {
+      "trial_id": "mlp-h64-a0p001-direct",
+      "family": "mlp_relu",
+      "parameterization": "direct",
+      "params": {
+        "hidden_layer_sizes": [
+          64
+        ],
+        "alpha": 0.001,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    },
+    {
+      "trial_id": "mlp-h64x32-a0p001-direct",
+      "family": "mlp_relu",
+      "parameterization": "direct",
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.001,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    },
+    {
+      "trial_id": "mlp-h128x64-a0p001-direct",
+      "family": "mlp_relu",
+      "parameterization": "direct",
+      "params": {
+        "hidden_layer_sizes": [
+          128,
+          64
+        ],
+        "alpha": 0.001,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    },
+    {
+      "trial_id": "mlp-h64x32-a0p01-direct",
+      "family": "mlp_relu",
+      "parameterization": "direct",
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.01,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    },
+    {
+      "trial_id": "mlp-h64x32-a0p001-residual",
+      "family": "mlp_relu",
+      "parameterization": "residual",
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.001,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    },
+    {
+      "trial_id": "mlp-h128x64-a0p001-residual",
+      "family": "mlp_relu",
+      "parameterization": "residual",
+      "params": {
+        "hidden_layer_sizes": [
+          128,
+          64
+        ],
+        "alpha": 0.001,
+        "learning_rate_init": 0.001,
+        "max_iter": 400
+      }
+    }
+  ],
+  "xgboost_policy": {
+    "status": "skipped_by_policy",
+    "enable_flag": "--enable-xgboost",
+    "module_importable": false,
+    "eligible": false,
+    "reason": "XGBoost is opt-in. It is excluded from the trial list and from every export path until the operator passes the enable flag.",
+    "boundary": "An importable xgboost is not an eligible xgboost. Nothing in this pipeline may select an XGBoost candidate merely because the module loaded."
+  },
+  "parameterizations": {
+    "direct": {
+      "learns": "AT(t+30)",
+      "final_prediction": "model output"
+    },
+    "residual": {
+      "learns": "AT(t+30) - AT(t)",
+      "final_prediction": "AT(t) + predicted residual"
+    }
+  },
+  "parameterization_provenance": {
+    "direct": "predeclared in the technical design (predict AT(t+30)).",
+    "residual": "post-hoc hypothesis; suggested after an exploratory look at historical outcomes. Retrospective evaluation only. Do not describe it as predeclared."
+  },
+  "status": "both are retrospective hypotheses; neither is selected on this machine",
+  "selection_authority": "No final family, parameterization or hyperparameter may be selected on this machine. Selection happens in the later Colab phase against the fold protocol above.",
+  "boundary": [
+    "No family, parameterization or hyperparameter is selected here.",
+    "No test or evaluation outcome informed this registry."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "raw_rows": 74700,
+  "timestamp_valid_unique_rows": 74700,
+  "rows_rejected_physical_or_missing": 116,
+  "valid_5min_bins": 6815,
+  "first_valid_bin_utc": "2026-07-21T17:25:00+00:00",
+  "last_valid_bin_utc": "2026-08-15T20:35:00+00:00",
+  "eligible_windows": 6628,
+  "n_features": 125
+}

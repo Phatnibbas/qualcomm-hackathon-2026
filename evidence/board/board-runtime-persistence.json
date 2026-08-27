@@ -1,0 +1,36 @@
+{
+  "artifact": "board-runtime.json",
+  "measured_utc": "2026-08-15T21:01:09.3120897Z",
+  "device_scope": "Arduino UNO Q connected through ADB; serial intentionally omitted",
+  "remote_dir": "/home/arduino/halo-safeshift-emergency",
+  "artifact_zip": "HALO_SafeShift_20260815T205628Z-colab.zip",
+  "artifact_zip_sha256": "afd6a538d54f0030448ed9c4d8b3e35f82274aa65e8075efef830649b93ff161",
+  "remote_hash_output": "d46df87da2d252f8988f5756cbff69cac84908f34338351ac4c39cdaf38e66a0  edge_model.json\r\ne3538f231ea0d381bcf6cc12cdbe6cc3f608b34f2b03d9e3f39b07c4890a3251  edge_runner.py\r\n28cb7a3b71a1415c7265fca3f76c9f2ade61b7033f5428b6aefb8d176ab95ae0  replay_samples.json\r\n9c958ba454e7be0bc2af31c6a4b737f7ed75646ab31a1931484ff6a4830c97ee  metrics.json",
+  "runtime": {
+    "runtime": "Arduino UNO Q",
+    "hostname": "qualcomm",
+    "kernel": "7.0.0-g122c2c22d838",
+    "python": "3.13.5",
+    "model_type": "persistence",
+    "model_run_id": "20260815T205628Z-colab",
+    "samples": 64,
+    "repeat": 500,
+    "latency_ms": {
+      "median": 0.0434635,
+      "p95": 0.053282,
+      "max": 0.088385
+    },
+    "first_predictions": [
+      33.9842643737793,
+      33.952476501464844,
+      34.197914123535156,
+      34.171104431152344,
+      34.08696365356445
+    ]
+  },
+  "claim_boundary": [
+    "Latency is Python sparse-INT8/persistence inference on this UNO Q run only.",
+    "No NPU, QNN, Hexagon or GPU acceleration is claimed.",
+    "Model quality remains the retrospective chronological Colab result in metrics.json."
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "artifact": "fold_definitions",
+  "policy": "expanding-window blocked folds over historical_development only",
+  "forbidden": [
+    "random_split",
+    "shuffled_cross_validation",
+    "k_fold_random"
+  ],
+  "day_boundary": "UTC",
+  "min_train_days": 8,
+  "validation_days": 3,
+  "max_folds": 8,
+  "embargo_minutes_each_side": 90,
+  "embargo_rule": "For a train/validation boundary B: a train sample is admitted only when its target timestamp is at or before B - embargo_minutes; a validation sample is admitted only when its window start (issue_time - lookback_minutes) is at or after B + embargo_minutes. Total separation is therefore 2 x embargo_minutes.",
+  "fail_closed_on_empty_fold": true,
+  "fail_closed_on_empty_fold_reason": "A planned fold that realises zero train or zero validation samples changes the evaluation protocol. Silently dropping it means the reported fold count no longer describes what was planned, and the mean across folds is taken over a different set than the one declared. The run is rejected instead so the operator decides.",
+  "incomplete_day_policy": "Internal incomplete UTC days are retained. Eligibility is decided per window by the QC/validity rules only. No post-hoc 'complete day = N bins' threshold is applied.",
+  "fit_scope": "Scaler, clipping bounds, climatology and every other fitted transformation are fitted on the fold's train samples only.",
+  "status": "retrospective model development. This is NOT an untouched-test certification: the historical final dates have already been examined by an external verifier.",
+  "available_utc_days": [
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12",
+    "2026-08-13",
+    "2026-08-14"
+  ],
+  "n_windows": 6633,
+  "folds": [
+    {
+      "fold_index": 0,
+      "train_block_start_utc": "2026-07-21T00:00:00Z",
+      "boundary_utc": "2026-07-29T00:00:00Z",
+      "validation_block_end_utc": "2026-08-01T00:00:00Z",
+      "embargo_minutes_each_side": 90.0,
+      "total_separation_minutes": 180.0,
+      "n_train_issues": 1887,
+      "n_validation_issues": 829,
+      "train_issue_range_utc": {
+        "first": "2026-07-21T17:05:00Z",
+        "last": "2026-07-28T22:00:00Z"
+      },
+      "train_target_range_utc": {
+        "first": "2026-07-21T17:35:00Z",
+        "last": "2026-07-28T22:30:00Z"
+      },
+      "validation_issue_range_utc": {
+        "first": "2026-07-29T02:30:00Z",
+        "last": "2026-07-31T23:30:00Z"
+      },
+      "validation_target_range_utc": {
+        "first": "2026-07-29T03:00:00Z",
+        "last": "2026-08-01T00:00:00Z"
+      }
+    },
+    {
+      "fold_index": 1,
+      "train_block_start_utc": "2026-07-21T00:00:00Z",
+      "boundary_utc": "2026-08-01T00:00:00Z",
+      "validation_block_end_utc": "2026-08-04T00:00:00Z",
+      "embargo_minutes_each_side": 90.0,
+      "total_separation_minutes": 180.0,
+      "n_train_issues": 2751,
+      "n_validation_issues": 829,
+      "train_issue_range_utc": {
+        "first": "2026-07-21T17:05:00Z",
+        "last": "2026-07-31T22:00:00Z"
+      },
+      "train_target_range_utc": {
+        "first": "2026-07-21T17:35:00Z",
+        "last": "2026-07-31T22:30:00Z"
+      },
+      "validation_issue_range_utc": {
+        "first": "2026-08-01T02:30:00Z",
+        "last": "2026-08-03T23:30:00Z"
+      },
+      "validation_target_range_utc": {
+        "first": "2026-08-01T03:00:00Z",
+        "last": "2026-08-04T00:00:00Z"
+      }
+    },
+    {
+      "fold_index": 2,
+      "train_block_start_utc": "2026-07-21T00:00:00Z",
+      "boundary_utc": "2026-08-04T00:00:00Z",
+      "validation_block_end_utc": "2026-08-07T00:00:00Z",
+      "embargo_minutes_each_side": 90.0,
+      "total_separation_minutes": 180.0,
+      "n_train_issues": 3615,
+      "n_validation_issues": 829,
+      "train_issue_range_utc": {
+        "first": "2026-07-21T17:05:00Z",
+        "last": "2026-08-03T22:00:00Z"
+      },
+      "train_target_range_utc": {
+        "first": "2026-07-21T17:35:00Z",
+        "last": "2026-08-03T22:30:00Z"
+      },
+      "validation_issue_range_utc": {
+        "first": "2026-08-04T02:30:00Z",
+        "last": "2026-08-06T23:30:00Z"
+      },
+      "validation_target_range_utc": {
+        "first": "2026-08-04T03:00:00Z",
+        "last": "2026-08-07T00:00:00Z"
+      }
+    },
+    {
+      "fold_index": 3,
+      "train_block_start_utc": "2026-07-21T00:00:00Z",
+      "boundary_utc": "2026-08-07T00:00:00Z",
+      "validation_block_end_utc": "2026-08-10T00:00:00Z",
+      "embargo_minutes_each_side": 90.0,
+      "total_separation_minutes": 180.0,
+      "n_train_issues": 4479,
+      "n_validation_issues": 803,
+      "train_issue_range_utc": {
+        "first": "2026-07-21T17:05:00Z",
+        "last": "2026-08-06T22:00:00Z"
+      },
+      "train_target_range_utc": {
+        "first": "2026-07-21T17:35:00Z",
+        "last": "2026-08-06T22:30:00Z"
+      },
+      "validation_issue_range_utc": {
+        "first": "2026-08-07T02:30:00Z",
+        "last": "2026-08-09T23:30:00Z"
+      },
+      "validation_target_range_utc": {
+        "first": "2026-08-07T03:00:00Z",
+        "last": "2026-08-10T00:00:00Z"
+      }
+    },
+    {
+      "fold_index": 4,
+      "train_block_start_utc": "2026-07-21T00:00:00Z",
+      "boundary_utc": "2026-08-10T00:00:00Z",
+      "validation_block_end_utc": "2026-08-13T00:00:00Z",
+      "embargo_minutes_each_side": 90.0,
+      "total_separation_minutes": 180.0,
+      "n_train_issues": 5317,
+      "n_validation_issues": 809,
+      "train_issue_range_utc": {
+        "first": "2026-07-21T17:05:00Z",
+        "last": "2026-08-09T22:00:00Z"
+      },
+      "train_target_range_utc": {
+        "first": "2026-07-21T17:35:00Z",
+        "last": "2026-08-09T22:30:00Z"
+      },
+      "validation_issue_range_utc": {
+        "first": "2026-08-10T02:30:00Z",
+        "last": "2026-08-12T23:30:00Z"
+      },
+      "validation_target_range_utc": {
+        "first": "2026-08-10T03:00:00Z",
+        "last": "2026-08-13T00:00:00Z"
+      }
+    }
+  ],
+  "boundary": [
+    "Fold definitions only. No model was fitted or scored to produce this artifact.",
+    "Do not call any block here an untouched test."
+  ]
+}

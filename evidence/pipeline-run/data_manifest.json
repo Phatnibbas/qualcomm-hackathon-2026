@@ -1,0 +1,443 @@
+{
+  "artifact": "data_manifest.json",
+  "config_id": "experiment.v1",
+  "source": {
+    "channel_id": 3428136,
+    "channel_name": "MakerLab Giadinh Station",
+    "source_urls": [
+      "https://api.thingspeak.com/channels/3428136/feeds.json?results=8000&status=true"
+    ],
+    "page_count": 1,
+    "page_cap": 40,
+    "results_per_page": 8000,
+    "complete_history": true,
+    "complete_history_definition": "The pull ended because a page returned no rows or no new entry id, not because the page cap was reached. A cap-truncated pull raises instead of being recorded, so this field is never false in a manifest that exists."
+  },
+  "pull": {
+    "start_utc": "2026-08-15T19:06:23.326249Z",
+    "end_utc": "2026-08-15T19:06:24.608463Z",
+    "duration_seconds": 1.282,
+    "puller_command": "py -3 benchmarks/halo/freeze_station_history.py --from-frozen-csv benchmarks/halo/_cache/20260815T170833Z-99afc2c/station_raw.csv --from-frozen-metadata evidence/halo-safeshift/20260815T170833Z-99afc2c/channel_metadata.json --reused-source-manifest evidence/halo-safeshift/20260815T170833Z-99afc2c/data_manifest.json --out benchmarks/halo/_cache/20260815T190622Z-99afc2c/station_raw.csv --metadata-out evidence/halo-safeshift/20260815T190622Z-99afc2c/channel_metadata.json --manifest evidence/halo-safeshift/20260815T190622Z-99afc2c/data_manifest.json",
+    "network_pull": false
+  },
+  "acquisition": {
+    "mode": "reused immutable source freeze",
+    "reused_csv_path": "benchmarks/halo/_cache/20260815T170833Z-99afc2c/station_raw.csv",
+    "reused_csv_sha256": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "reused_metadata_path": "evidence/halo-safeshift/20260815T170833Z-99afc2c/channel_metadata.json",
+    "reused_metadata_sha256": "15eb5ce5fd57afc0cf20c5fff4fcd2e57ea7c8643fb6e240a0a5cb9da32b6f63",
+    "previous_source_manifest": {
+      "path": "evidence/halo-safeshift/20260815T170833Z-99afc2c/data_manifest.json",
+      "sha256": "c7c1b014bbafb75d14c548b2d875b0c3179da048aa100d92b1f42c55fe1529e5"
+    },
+    "network_calls": 0,
+    "live_data_appended": false,
+    "boundary": "The bytes were acquired by the earlier run recorded in previous_source_manifest. This manifest was produced by the current version of this script reading those bytes offline. integrity.puller_* identifies what produced THIS manifest; acquisition identifies what pulled the data. Conflating the two would let a corrected script claim credit for a pull it never made."
+  },
+  "rows": {
+    "count": 96659,
+    "first_entry_id": 1,
+    "last_entry_id": 96659,
+    "first_timestamp_utc": "2026-07-15T10:18:20Z",
+    "last_timestamp_utc": "2026-08-15T17:08:25Z",
+    "channel_last_entry_id_at_pull": 96659
+  },
+  "field_mapping_from_metadata": {
+    "field1": {
+      "label": "WindSpeed",
+      "semantic": "wind_speed"
+    },
+    "field2": {
+      "label": "WindDirection",
+      "semantic": "wind_direction"
+    },
+    "field3": {
+      "label": "Temperature",
+      "semantic": "temperature"
+    },
+    "field4": {
+      "label": "Pressure",
+      "semantic": "pressure"
+    },
+    "field5": {
+      "label": "Light",
+      "semantic": "light"
+    },
+    "field6": {
+      "label": "Humidity",
+      "semantic": "humidity"
+    },
+    "field7": {
+      "label": "Noise",
+      "semantic": "noise"
+    },
+    "field8": {
+      "label": "PM2.5",
+      "semantic": "pm25"
+    }
+  },
+  "raw_csv_columns": [
+    "entry_id",
+    "created_at",
+    "status",
+    "field1",
+    "field2",
+    "field3",
+    "field4",
+    "field5",
+    "field6",
+    "field7",
+    "field8"
+  ],
+  "raw_column_policy": "Raw source columns are written verbatim and are never renamed or reordered. Semantic names live in the mapping above.",
+  "integrity": {
+    "csv_path": "benchmarks/halo/_cache/20260815T190622Z-99afc2c/station_raw.csv",
+    "csv_sha256": "859f15ee414ccb9cfd493d3d3e1895551ce4812f4649273cc609a912a85459a4",
+    "metadata_path": "evidence/halo-safeshift/20260815T190622Z-99afc2c/channel_metadata.json",
+    "metadata_sha256": "25f2fc658667960c13153809ad23a4b503f82718721d12ae3d76189b57066b1b",
+    "puller_path": "benchmarks/halo/freeze_station_history.py",
+    "puller_sha256": "21da7663163294088d3f53a917a2d5ee0bb82fd60487587d0e6dc7e0610515e3",
+    "puller_role": "the script that produced THIS manifest. When `acquisition.mode` is a reused freeze, the bytes were pulled earlier by a different script version; see `acquisition` for what actually fetched them.",
+    "path_policy": "repository-relative POSIX paths only; absolute paths are refused"
+  },
+  "continuity": {
+    "unparsable_timestamps": 0,
+    "timestamp_order": "non-decreasing",
+    "non_monotonic_pairs": 0,
+    "duplicate_entry_ids": [],
+    "duplicate_timestamps": [],
+    "cadence": {
+      "n_intervals": 96658,
+      "min_seconds": 16.0,
+      "median_seconds": 27.0,
+      "p95_seconds": 28.0,
+      "max_seconds": 95038.0
+    },
+    "gap_counts": {
+      "gaps_over_60s": 23,
+      "gaps_over_300s": 13,
+      "gaps_over_900s": 10
+    },
+    "gaps": {
+      "gaps_over_60s": [
+        {
+          "after_entry_id": 22144,
+          "gap_start_utc": "2026-07-21T12:44:26Z",
+          "gap_end_utc": "2026-07-21T13:05:56Z",
+          "gap_seconds": 1290.0
+        },
+        {
+          "after_entry_id": 22153,
+          "gap_start_utc": "2026-07-21T13:09:51Z",
+          "gap_end_utc": "2026-07-21T13:11:28Z",
+          "gap_seconds": 97.0
+        },
+        {
+          "after_entry_id": 22155,
+          "gap_start_utc": "2026-07-21T13:11:52Z",
+          "gap_end_utc": "2026-07-21T13:55:25Z",
+          "gap_seconds": 2613.0
+        },
+        {
+          "after_entry_id": 22195,
+          "gap_start_utc": "2026-07-21T14:10:52Z",
+          "gap_end_utc": "2026-07-21T14:21:14Z",
+          "gap_seconds": 622.0
+        },
+        {
+          "after_entry_id": 22229,
+          "gap_start_utc": "2026-07-21T14:34:21Z",
+          "gap_end_utc": "2026-07-21T15:39:21Z",
+          "gap_seconds": 3900.0
+        },
+        {
+          "after_entry_id": 22249,
+          "gap_start_utc": "2026-07-21T15:47:55Z",
+          "gap_end_utc": "2026-07-21T16:03:36Z",
+          "gap_seconds": 941.0
+        },
+        {
+          "after_entry_id": 24037,
+          "gap_start_utc": "2026-07-22T05:37:55Z",
+          "gap_end_utc": "2026-07-22T06:29:51Z",
+          "gap_seconds": 3116.0
+        },
+        {
+          "after_entry_id": 24220,
+          "gap_start_utc": "2026-07-22T07:52:43Z",
+          "gap_end_utc": "2026-07-22T08:42:43Z",
+          "gap_seconds": 3000.0
+        },
+        {
+          "after_entry_id": 24583,
+          "gap_start_utc": "2026-07-22T11:27:45Z",
+          "gap_end_utc": "2026-07-22T12:35:43Z",
+          "gap_seconds": 4078.0
+        },
+        {
+          "after_entry_id": 24585,
+          "gap_start_utc": "2026-07-22T12:36:19Z",
+          "gap_end_utc": "2026-07-22T16:58:56Z",
+          "gap_seconds": 15757.0
+        },
+        {
+          "after_entry_id": 24588,
+          "gap_start_utc": "2026-07-22T16:59:50Z",
+          "gap_end_utc": "2026-07-22T17:01:53Z",
+          "gap_seconds": 123.0
+        },
+        {
+          "after_entry_id": 27769,
+          "gap_start_utc": "2026-07-23T17:13:29Z",
+          "gap_end_utc": "2026-07-23T17:14:34Z",
+          "gap_seconds": 65.0
+        },
+        {
+          "after_entry_id": 30768,
+          "gap_start_utc": "2026-07-24T16:02:14Z",
+          "gap_end_utc": "2026-07-24T16:39:36Z",
+          "gap_seconds": 2242.0
+        },
+        {
+          "after_entry_id": 38810,
+          "gap_start_utc": "2026-07-27T05:49:04Z",
+          "gap_end_utc": "2026-07-27T05:53:09Z",
+          "gap_seconds": 245.0
+        },
+        {
+          "after_entry_id": 42512,
+          "gap_start_utc": "2026-07-28T10:01:59Z",
+          "gap_end_utc": "2026-07-28T10:07:50Z",
+          "gap_seconds": 351.0
+        },
+        {
+          "after_entry_id": 51373,
+          "gap_start_utc": "2026-07-31T05:34:43Z",
+          "gap_end_utc": "2026-07-31T05:35:50Z",
+          "gap_seconds": 67.0
+        },
+        {
+          "after_entry_id": 62654,
+          "gap_start_utc": "2026-08-03T19:29:36Z",
+          "gap_end_utc": "2026-08-03T19:30:44Z",
+          "gap_seconds": 68.0
+        },
+        {
+          "after_entry_id": 71933,
+          "gap_start_utc": "2026-08-06T18:14:25Z",
+          "gap_end_utc": "2026-08-06T18:15:47Z",
+          "gap_seconds": 82.0
+        },
+        {
+          "after_entry_id": 74759,
+          "gap_start_utc": "2026-08-07T15:46:17Z",
+          "gap_end_utc": "2026-08-07T15:50:16Z",
+          "gap_seconds": 239.0
+        },
+        {
+          "after_entry_id": 79384,
+          "gap_start_utc": "2026-08-09T03:02:41Z",
+          "gap_end_utc": "2026-08-09T03:08:55Z",
+          "gap_seconds": 374.0
+        },
+        {
+          "after_entry_id": 95198,
+          "gap_start_utc": "2026-08-14T03:32:47Z",
+          "gap_end_utc": "2026-08-14T03:33:58Z",
+          "gap_seconds": 71.0
+        },
+        {
+          "after_entry_id": 95582,
+          "gap_start_utc": "2026-08-14T06:29:28Z",
+          "gap_end_utc": "2026-08-14T06:31:25Z",
+          "gap_seconds": 117.0
+        },
+        {
+          "after_entry_id": 96535,
+          "gap_start_utc": "2026-08-14T13:48:20Z",
+          "gap_end_utc": "2026-08-15T16:12:18Z",
+          "gap_seconds": 95038.0
+        }
+      ],
+      "gaps_over_300s": [
+        {
+          "after_entry_id": 22144,
+          "gap_start_utc": "2026-07-21T12:44:26Z",
+          "gap_end_utc": "2026-07-21T13:05:56Z",
+          "gap_seconds": 1290.0
+        },
+        {
+          "after_entry_id": 22155,
+          "gap_start_utc": "2026-07-21T13:11:52Z",
+          "gap_end_utc": "2026-07-21T13:55:25Z",
+          "gap_seconds": 2613.0
+        },
+        {
+          "after_entry_id": 22195,
+          "gap_start_utc": "2026-07-21T14:10:52Z",
+          "gap_end_utc": "2026-07-21T14:21:14Z",
+          "gap_seconds": 622.0
+        },
+        {
+          "after_entry_id": 22229,
+          "gap_start_utc": "2026-07-21T14:34:21Z",
+          "gap_end_utc": "2026-07-21T15:39:21Z",
+          "gap_seconds": 3900.0
+        },
+        {
+          "after_entry_id": 22249,
+          "gap_start_utc": "2026-07-21T15:47:55Z",
+          "gap_end_utc": "2026-07-21T16:03:36Z",
+          "gap_seconds": 941.0
+        },
+        {
+          "after_entry_id": 24037,
+          "gap_start_utc": "2026-07-22T05:37:55Z",
+          "gap_end_utc": "2026-07-22T06:29:51Z",
+          "gap_seconds": 3116.0
+        },
+        {
+          "after_entry_id": 24220,
+          "gap_start_utc": "2026-07-22T07:52:43Z",
+          "gap_end_utc": "2026-07-22T08:42:43Z",
+          "gap_seconds": 3000.0
+        },
+        {
+          "after_entry_id": 24583,
+          "gap_start_utc": "2026-07-22T11:27:45Z",
+          "gap_end_utc": "2026-07-22T12:35:43Z",
+          "gap_seconds": 4078.0
+        },
+        {
+          "after_entry_id": 24585,
+          "gap_start_utc": "2026-07-22T12:36:19Z",
+          "gap_end_utc": "2026-07-22T16:58:56Z",
+          "gap_seconds": 15757.0
+        },
+        {
+          "after_entry_id": 30768,
+          "gap_start_utc": "2026-07-24T16:02:14Z",
+          "gap_end_utc": "2026-07-24T16:39:36Z",
+          "gap_seconds": 2242.0
+        },
+        {
+          "after_entry_id": 42512,
+          "gap_start_utc": "2026-07-28T10:01:59Z",
+          "gap_end_utc": "2026-07-28T10:07:50Z",
+          "gap_seconds": 351.0
+        },
+        {
+          "after_entry_id": 79384,
+          "gap_start_utc": "2026-08-09T03:02:41Z",
+          "gap_end_utc": "2026-08-09T03:08:55Z",
+          "gap_seconds": 374.0
+        },
+        {
+          "after_entry_id": 96535,
+          "gap_start_utc": "2026-08-14T13:48:20Z",
+          "gap_end_utc": "2026-08-15T16:12:18Z",
+          "gap_seconds": 95038.0
+        }
+      ],
+      "gaps_over_900s": [
+        {
+          "after_entry_id": 22144,
+          "gap_start_utc": "2026-07-21T12:44:26Z",
+          "gap_end_utc": "2026-07-21T13:05:56Z",
+          "gap_seconds": 1290.0
+        },
+        {
+          "after_entry_id": 22155,
+          "gap_start_utc": "2026-07-21T13:11:52Z",
+          "gap_end_utc": "2026-07-21T13:55:25Z",
+          "gap_seconds": 2613.0
+        },
+        {
+          "after_entry_id": 22229,
+          "gap_start_utc": "2026-07-21T14:34:21Z",
+          "gap_end_utc": "2026-07-21T15:39:21Z",
+          "gap_seconds": 3900.0
+        },
+        {
+          "after_entry_id": 22249,
+          "gap_start_utc": "2026-07-21T15:47:55Z",
+          "gap_end_utc": "2026-07-21T16:03:36Z",
+          "gap_seconds": 941.0
+        },
+        {
+          "after_entry_id": 24037,
+          "gap_start_utc": "2026-07-22T05:37:55Z",
+          "gap_end_utc": "2026-07-22T06:29:51Z",
+          "gap_seconds": 3116.0
+        },
+        {
+          "after_entry_id": 24220,
+          "gap_start_utc": "2026-07-22T07:52:43Z",
+          "gap_end_utc": "2026-07-22T08:42:43Z",
+          "gap_seconds": 3000.0
+        },
+        {
+          "after_entry_id": 24583,
+          "gap_start_utc": "2026-07-22T11:27:45Z",
+          "gap_end_utc": "2026-07-22T12:35:43Z",
+          "gap_seconds": 4078.0
+        },
+        {
+          "after_entry_id": 24585,
+          "gap_start_utc": "2026-07-22T12:36:19Z",
+          "gap_end_utc": "2026-07-22T16:58:56Z",
+          "gap_seconds": 15757.0
+        },
+        {
+          "after_entry_id": 30768,
+          "gap_start_utc": "2026-07-24T16:02:14Z",
+          "gap_end_utc": "2026-07-24T16:39:36Z",
+          "gap_seconds": 2242.0
+        },
+        {
+          "after_entry_id": 96535,
+          "gap_start_utc": "2026-08-14T13:48:20Z",
+          "gap_end_utc": "2026-08-15T16:12:18Z",
+          "gap_seconds": 95038.0
+        }
+      ]
+    },
+    "largest_gap": {
+      "after_entry_id": 96535,
+      "gap_start_utc": "2026-08-14T13:48:20Z",
+      "gap_end_utc": "2026-08-15T16:12:18Z",
+      "gap_seconds": 95038.0,
+      "gap_hours": 26.3994
+    },
+    "long_outage_threshold_hours": 6,
+    "long_outages": [
+      {
+        "after_entry_id": 96535,
+        "gap_start_utc": "2026-08-14T13:48:20Z",
+        "gap_end_utc": "2026-08-15T16:12:18Z",
+        "gap_hours": 26.3994,
+        "first_entry_id_after_gap": 96536
+      }
+    ],
+    "latest_long_outage": {
+      "after_entry_id": 96535,
+      "gap_start_utc": "2026-08-14T13:48:20Z",
+      "gap_end_utc": "2026-08-15T16:12:18Z",
+      "gap_hours": 26.3994,
+      "first_entry_id_after_gap": 96536
+    },
+    "first_entry_after_latest_long_outage": {
+      "entry_id": 96536,
+      "created_at_utc": "2026-08-15T16:12:18Z"
+    }
+  },
+  "recovery_context": {
+    "cause": "user-confirmed manual station reset",
+    "firmware_root_cause": "unresolved",
+    "boundary": "Resumption after a manual reset is not evidence that the firmware hang is fixed. Only the outage interval, the first entry after recovery and the state at pull time are recorded."
+  },
+  "boundary": [
+    "Read-only acquisition and integrity record. No model, metric or claim is produced here.",
+    "Feed continuity is not sensor completeness: a device that fails to post creates no entry id to be missing."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "family": "xgboost_300",
+  "test_mae_fp32": 1.1284921105827301,
+  "persistence_test_mae": 0.805522351808402,
+  "beats_persistence": false,
+  "parity_max_abs_error": 0.10754236956025198,
+  "nodes": 8790,
+  "trees": 300,
+  "json_bytes": 239255,
+  "note": "selected on nothing; this is a test-set read like the rest of the sweep"
+}

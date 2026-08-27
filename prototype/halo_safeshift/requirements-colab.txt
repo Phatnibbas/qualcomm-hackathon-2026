@@ -1,0 +1,22 @@
+# HALO SafeShift — DEFAULT Colab training dependencies.
+#
+# Do NOT install these on the local preparation machine, and do NOT install
+# them on the UNO Q. The deployment runtime imports the Python standard
+# library and NumPy, nothing else.
+#
+# Install in Colab with:
+#     pip install -r requirements-colab.txt
+#
+# numpy / pandas / scikit-learn are pinned to the versions the local
+# preparation run actually observed (recorded in run_manifest.json), so a Colab
+# result can be compared against the local parity checks without a silent
+# library drift explaining any difference.
+#
+# XGBoost is deliberately ABSENT from this file. It is opt-in and lives in
+# requirements-colab-xgboost.txt. A default environment that quietly provides
+# XGBoost makes "xgboost is available" the reason it gets considered, which is
+# not a reason.
+
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.6.1

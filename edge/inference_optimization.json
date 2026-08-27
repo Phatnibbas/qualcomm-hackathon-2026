@@ -1,0 +1,42 @@
+{
+  "machine": "AMD64",
+  "hostname": "<redacted-workstation>",
+  "python": "3.12.10",
+  "kernel": "11",
+  "repeat": 3000,
+  "samples": 64,
+  "models": {
+    "persistence (shipped)": {
+      "model_type": "persistence",
+      "nonzero_weights": 0,
+      "max_abs_diff": 0.0,
+      "baseline_ms": {
+        "median": 0.0655,
+        "p95": 0.1196,
+        "max": 1.4063
+      },
+      "optimized_ms": {
+        "median": 0.002,
+        "p95": 0.0038,
+        "max": 0.0859
+      },
+      "speedup": 32.75
+    },
+    "challenger sparse-INT8 MLP": {
+      "model_type": "mlp_sparse_int8",
+      "nonzero_weights": 3025,
+      "max_abs_diff": 2.1316282072803006e-14,
+      "baseline_ms": {
+        "median": 2.67175,
+        "p95": 5.4255,
+        "max": 108.9439
+      },
+      "optimized_ms": {
+        "median": 0.4416,
+        "p95": 0.931,
+        "max": 2.7465
+      },
+      "speedup": 6.050158514492753
+    }
+  }
+}
